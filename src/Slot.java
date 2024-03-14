@@ -1,8 +1,8 @@
 public class Slot {
     private byte x;
     private byte y;
-    private byte color = -1;
     private boolean filled = false;
+    // TODO: Add a piece field to Slot? Track pieces in some way
 
     public Slot(byte x, byte y) {
         this.x = x;
@@ -23,14 +23,6 @@ public class Slot {
 
     public void setY(byte y) {
         this.y = y;
-    }
-
-    public byte getColor() {
-        return color;
-    }
-
-    public void setColor(byte color) {
-        this.color = color;
     }
 
     public boolean isFilled() {
