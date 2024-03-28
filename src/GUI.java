@@ -14,7 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-public class GUI extends JFrame{
+
+public class GUI extends JFrame {
     private JButton startButton;
     private JComboBox<Integer> playerSelection;
     private JPanel boardPanel;
@@ -67,7 +68,7 @@ public class GUI extends JFrame{
     }
 
     private void createPlayerSelection() {
-        Integer[] playerOptions = {1, 2};
+        Integer[] playerOptions = { 1, 2 };
 
         playerSelection = new JComboBox<>(playerOptions);
 
@@ -97,8 +98,8 @@ public class GUI extends JFrame{
         boardPanel.setLayout(new GridLayout(boardSize, boardSize));
         board = new JPanel[boardSize][boardSize];
 
-        for(int i = 0; i < boardSize; i++) {
-            for(int j = 0; j < boardSize; j++) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
                 board[i][j] = new JPanel();
                 board[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 boardPanel.add(board[i][j]);
@@ -167,4 +168,3 @@ public class GUI extends JFrame{
         });
     }
 }
-

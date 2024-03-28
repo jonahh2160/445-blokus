@@ -1,11 +1,6 @@
+import java.awt.Color;
+
 public class Piece {
-    public enum Color {
-        // Organized by turn order
-        BLUE,
-        YELLOW,
-        RED,
-        GREEN
-    }
 
     public enum Type {
         // See https://en.wikipedia.org/wiki/Blokus#/media/File:Blokus_tiles.svg
@@ -33,7 +28,7 @@ public class Piece {
     }
 
     private byte type = -1;
-    private byte color = -1;
+    private Color color = null;
     private boolean selected = false;
     private int rotation = 0;
     // TODO: Figure out how to store the layout of the piece and/or its position

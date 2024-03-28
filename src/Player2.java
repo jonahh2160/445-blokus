@@ -1,13 +1,12 @@
 public class Player2 {
-    
+
     String name;
     String color;
     double score;
     int pieces;
     boolean lastPiece;
-    
 
-    public Player2(String name, String color, double score, int pieces, boolean lastPiece){
+    public Player2(String name, String color, double score, int pieces, boolean lastPiece) {
         this.name = name;
         this.color = color;
         this.score = score;
@@ -15,34 +14,35 @@ public class Player2 {
         lastPiece = false;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String newName){
+    public void setName(String newName) {
         this.name = newName;
     }
 
-    public String getColor(){
+    public String getColor() {
         return color;
     }
 
-    public void setColor(String newColor){
+    public void setColor(String newColor) {
         this.color = newColor;
     }
-    public double getScore(){
+
+    public double getScore() {
         return score;
     }
 
-    public void setScore(double newScore){
+    public void setScore(double newScore) {
         this.score = newScore;
     }
 
-    public int getPieces(){
+    public int getPieces() {
         return pieces;
     }
 
-    public void setPeices(int newAmountOfPieces){
+    public void setPeices(int newAmountOfPieces) {
         this.pieces = newAmountOfPieces;
     }
 
@@ -53,9 +53,5 @@ public class Player2 {
     public void setAsLastPiece(boolean thisIsLastPiece) {
         this.lastPiece = thisIsLastPiece;
     }
-
-
-
-
 
 }
