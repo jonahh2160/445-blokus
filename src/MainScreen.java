@@ -1,6 +1,4 @@
-import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,9 +6,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//Michael Toon 3/28/24
+
 public class MainScreen implements ActionListener {
 
-    public MainScreen() {
+    private GUI blokusGUI;
+    public MainScreen(GUI blokusGUI) {
 
         JFrame frame = new JFrame();
         frame.setSize(500, 300);
@@ -38,12 +39,14 @@ public class MainScreen implements ActionListener {
         multiPlayerButton.addActionListener(this);
         panel.add(multiPlayerButton, gbc);
 
+        blokusGUI.setVisible(false);
         frame.setVisible(true);
 
     }
 
     public static void main(String[] args) {
-        new MainScreen();
+        GUI blokusGUI = new GUI();
+        new MainScreen(blokusGUI);
     }
 
     @Override
@@ -55,5 +58,6 @@ public class MainScreen implements ActionListener {
             // Code to call Multiplayer Game
             System.out.println("Starting Multiplayer Game!");
         }
+        blokusGUI.setVisible(true);
     }
 }
