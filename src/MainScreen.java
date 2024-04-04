@@ -10,7 +10,8 @@ import java.awt.event.ActionListener;
 
 public class MainScreen implements ActionListener {
 
-    public MainScreen() {
+    private GUI blokusGUI;
+    public MainScreen(GUI blokusGUI) {
 
         JFrame frame = new JFrame();
         frame.setSize(500, 300);
@@ -49,12 +50,14 @@ public class MainScreen implements ActionListener {
         multiPlayerButton.addActionListener(this);
         panel.add(multiPlayerButton, gbc);
 
+        blokusGUI.setVisible(false);
         frame.setVisible(true);
 
     }
 
     public static void main(String[] args) {
-        new MainScreen();
+        GUI blokusGUI = new GUI();
+        new MainScreen(blokusGUI);
     }
 
     @Override
@@ -66,5 +69,6 @@ public class MainScreen implements ActionListener {
             // Code to call Multiplayer Game
             System.out.println("Starting Multiplayer Game!");
         }
+        blokusGUI.setVisible(true);
     }
 }
