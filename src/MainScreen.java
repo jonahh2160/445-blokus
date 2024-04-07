@@ -1,7 +1,4 @@
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +10,7 @@ public class MainScreen implements ActionListener {
     private GUI blokusGUI;
     public MainScreen(GUI blokusGUI) {
 
+        this.blokusGUI = blokusGUI;
         JFrame frame = new JFrame();
         frame.setSize(500, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
