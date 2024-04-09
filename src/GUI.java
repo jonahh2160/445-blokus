@@ -3,18 +3,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
+//Elijah Wheat 3/24/24
 public class GUI extends JFrame {
 
     private JPanel boardPanel;
@@ -29,21 +24,25 @@ public class GUI extends JFrame {
         setTitle("Blokus Game");
         setSize(1000, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
 
+        //create panels for game board
         createBoardPanel();
         createPlayer1Panel();
         createPlayer2Panel();
         createScoreLabels();
 
+        //player 1 panel with score
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.add(player1Panel, BorderLayout.CENTER);
         leftPanel.add(player1Score, BorderLayout.NORTH);
 
+        //player 2 panel with score
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.add(player2Panel, BorderLayout.CENTER);
         rightPanel.add(player2Score, BorderLayout.NORTH);
 
-
+        //add the game board, player panels, and score labels to main frame
         add(boardPanel, BorderLayout.CENTER);
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.EAST);
@@ -51,6 +50,7 @@ public class GUI extends JFrame {
         setVisible(true);
     }
 
+    //method to create game board panel
     private void createBoardPanel() {
         boardPanel = new JPanel(new GridLayout(boardSize, boardSize));
         board = new JPanel[boardSize][boardSize];
@@ -64,6 +64,7 @@ public class GUI extends JFrame {
         }
     }
 
+    //method to create the panel for player 1
     private void createPlayer1Panel() {
         player1Panel = new JPanel();
         player1Panel.setLayout(new BorderLayout());
@@ -77,6 +78,7 @@ public class GUI extends JFrame {
         player1Panel.add(scroll, BorderLayout.CENTER);
     }
 
+    //method to create the panel for player 2
     private void createPlayer2Panel() {
         player2Panel = new JPanel();
         player2Panel.setLayout(new BorderLayout());
@@ -90,6 +92,7 @@ public class GUI extends JFrame {
         player2Panel.add(scroll, BorderLayout.CENTER);
     }
 
+    //method to display score
     private void createScoreLabels() {
         player1Score = new JLabel("Score: 0");
         player2Score = new JLabel("Score: 0");
