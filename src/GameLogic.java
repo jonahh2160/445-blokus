@@ -1,4 +1,4 @@
-public class GameLogic {
+public class GameLogic extends GUI{
     
     Piece piece;
     Boolean player1Turn;
@@ -31,8 +31,15 @@ public class GameLogic {
         return null;
     }
 
-    public Piece playPeice(Piece piece){
+    public Piece playPeice(GUI[][] board,Piece piece){
         return null;
+    }
+
+    public Boolean validFirstMove(GUI[][] board, Piece piece){  
+        if(board == [0][0] )
+
+    //Some way to pass ints or rows and columns for the board? 
+    //
     }
 
 }

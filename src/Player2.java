@@ -1,5 +1,7 @@
 public class Player2 {
 
+    //Michael Toon  3/28/24
+
     String name;
     String color;
     double score;
