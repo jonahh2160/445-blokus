@@ -46,15 +46,31 @@ public class Piece {
     // Rotate the 2D array clockwise
     public void rotateRight() {
         rotation = (rotation + 1) % 4;
-
         // TODO: Write logic to rotate array
+        int[][] rotatedLayout = new int[layout[0].length][layout.length];
+
+        for (int i = 0; i < layout.length; i++) {
+            for (int j = 0; j < layout[i].length; j++) {
+                rotatedLayout[j][layout.length - 1 - i] = layout[i][j];
+            }
+        }
+
+        layout = rotatedLayout;
     }
 
     // Rotate the 2D array counter-clockwise
     public void rotateLeft() {
-        rotation = (rotation - 1) % 4;
-
+        rotation = (rotation - 1 + 4) % 4;
         // TODO: Write logic to rotate array
+        int[][] rotatedLayout = new int[layout[0].length][layout.length];
+
+        for (int i = 0; i < layout.length; i++) {
+            for (int j = 0; j < layout[i].length; j++) {
+                rotatedLayout[layout[i].length - 1 - j][i] = layout[i][j];
+            }
+        }
+
+        layout = rotatedLayout;
     }
 
     public void select() {
