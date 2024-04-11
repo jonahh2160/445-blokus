@@ -1,3 +1,5 @@
+// JH 4/9
+
 import java.awt.Color;
 
 public class Piece {

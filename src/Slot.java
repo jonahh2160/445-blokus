@@ -1,3 +1,5 @@
+// JH 4/9
+
 public class Slot {
     private byte x;
     private byte y;
