@@ -1,8 +1,8 @@
-// JH 4/10
+// JH 4/11
 
 public class GameBoard {
 
-    // -1: Empty, 0: Blue, 1: Yellow, 2: Red, 3 Green
+    // Space status: 0: Empty, 1: Blue, 2: Yellow, 3: Red, 4 Green
 
     // Instantiate variables
     private int[][] board;
@@ -26,6 +26,16 @@ public class GameBoard {
 
     // TODO: Method to place a piece? (Pass piece and location, offset by mouse pos)
     // TODO: Method to calculate score
+
+    public int getSpaceValue(int x, int y) {
+        return board[x][y];
+    }
+
+    // Returns a list of each coordinate pair where the piece would be placed
+    private int[][] tryPiece(Piece piece, int x, int y) {
+
+        return;
+    }
 
     // Test method: print the status of the board
     private void printBoard() {

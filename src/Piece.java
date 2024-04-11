@@ -1,9 +1,8 @@
-// JH 4/9
-
-import java.awt.Color;
+// JH 4/11
 
 public class Piece {
 
+    // Enum containing the types of pieces
     public enum Type {
         // See https://en.wikipedia.org/wiki/Blokus#/media/File:Blokus_tiles.svg
         ONE,
@@ -29,26 +28,25 @@ public class Piece {
         BIGZ
     }
 
+    // Initialize variables
     private Type type;
-    private Color color;
+    private int color;
     private int[][] layout;
     private byte value = 0;
     private int rotation = 0;
     private boolean selected = false;
 
-    // TODO: Figure out how to store the layout of the piece and/or its position
-
-    public Piece(Type type, Color color) {
+    // Constructor
+    public Piece(Type type, PieceColor pieceColor) {
         this.type = type;
-        this.color = color;
-        initializePiece(type);
-        printLayout();
+        this.color = pieceColor.getColor();
+        makeLayout(type);
+        colorLayout(color);
     }
 
-    // Rotate the 2D array clockwise
+    // EW: Rotate the 2D array clockwise
     public void rotateRight() {
         rotation = (rotation + 1) % 4;
-        // TODO: Write logic to rotate array
         int[][] rotatedLayout = new int[layout[0].length][layout.length];
 
         for (int i = 0; i < layout.length; i++) {
@@ -60,10 +58,9 @@ public class Piece {
         layout = rotatedLayout;
     }
 
-    // Rotate the 2D array counter-clockwise
+    // EW: Rotate the 2D array counter-clockwise
     public void rotateLeft() {
         rotation = (rotation - 1 + 4) % 4;
-        // TODO: Write logic to rotate array
         int[][] rotatedLayout = new int[layout[0].length][layout.length];
 
         for (int i = 0; i < layout.length; i++) {
@@ -75,15 +72,8 @@ public class Piece {
         layout = rotatedLayout;
     }
 
-    public void select() {
-        selected = true;
-    }
-
-    public void unselect() {
-        selected = false;
-    }
-
-    private void initializePiece(Type type) {
+    // Creates the piece's layout in the 2D array
+    private void makeLayout(Type type) {
         switch (type) {
             case ONE:
                 layout = new int[][] { { 1 } };
@@ -175,7 +165,20 @@ public class Piece {
         }
     }
 
-    private void printLayout() {
+    // Converts the layout into its correct color
+    private void colorLayout(int color) {
+        for (int i = 0; i < layout.length; i++) {
+            for (int j = 0; j < layout[i].length; j++) {
+                if (layout[i][j] == 1) {
+                    layout[i][j] = color;
+                }
+            }
+        }
+    }
+
+    // Test method; prints the appearance of the piece
+    // 0: Empty, 1: Blue, 2: Yellow, 3: Red, 4 Green
+    public void printLayout() {
         System.out.println("Layout:");
         for (int i = 0; i < layout.length; i++) {
             for (int j = 0; j < layout[i].length; j++) {
