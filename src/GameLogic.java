@@ -1,9 +1,10 @@
 public class GameLogic extends GUI{
     
     Piece piece;
+    int amountOfPieces = 21;
     Boolean player1Turn;
 
-    public void setPlayer1Turn(Boolean ){
+    public void setPlayer1Turn(){
 
     }
 
@@ -24,22 +25,32 @@ public class GameLogic extends GUI{
     }
 
     public boolean allPiecesPlayed(){
-        return true;
+        if(amountOfPieces == 0){
+            return true;
+        }
+        return false;
     }
 
     public Piece pieceSelect(Piece piece){
-        return null;
+        this.piece = piece;
+        return piece;
     }
 
-    public Piece playPeice(GUI[][] board,Piece piece){
-        return null;
+    public Piece playPiece(int row, int column,Piece piece){
+        
     }
 
-    public Boolean validFirstMove(GUI[][] board, Piece piece){  
-        if(board == [0][0] )
+    //My idea is using getters to pass in coordinates from the action listener for row and column
+    public Boolean validFirstMove(int row, int column, Piece piece){  
+        if((row == 0 && column == 20) || (row == 0 && column == 0) || (row == 20 && column == 0) || (row == 20 && column ==20)){
+                throw new IllegalArgumentException("Must place first piece in a corner!");
+                return false;
+        }
+        else{
+            return true;
+        }
 
-    //Some way to pass ints or rows and columns for the board? 
-    //
+    //Assuming we are using int[][] to represent column and rows 
     }
 
 }
