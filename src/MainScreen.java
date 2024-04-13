@@ -7,10 +7,11 @@ import java.awt.event.ActionListener;
 
 public class MainScreen implements ActionListener {
 
-    private GUI blokusGUI;
+    private final GUI blokusGUI; //EW
     public MainScreen(GUI blokusGUI) {
 
-        this.blokusGUI = blokusGUI;
+        this.blokusGUI = blokusGUI; //EW
+
         JFrame frame = new JFrame();
         frame.setSize(500, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,7 +42,7 @@ public class MainScreen implements ActionListener {
         frame.setVisible(true);
 
     }
-
+    //EW
     public static void main(String[] args) {
         GUI blokusGUI = new GUI();
         new MainScreen(blokusGUI);
