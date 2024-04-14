@@ -33,6 +33,8 @@ public class Piece {
     private int color;
     private int[][] layout;
     private byte value = 0;
+    private int width = 0;
+    private int height = 0;
     private int rotation = 0;
     private boolean selected = false;
 
@@ -42,6 +44,7 @@ public class Piece {
         this.color = pieceColor.getColor();
         makeLayout(type);
         colorLayout(color);
+        updateDimensions();
     }
 
     // EW: Rotate the 2D array clockwise
@@ -56,6 +59,7 @@ public class Piece {
         }
 
         layout = rotatedLayout;
+        updateDimensions();
     }
 
     // EW: Rotate the 2D array counter-clockwise
@@ -70,6 +74,7 @@ public class Piece {
         }
 
         layout = rotatedLayout;
+        updateDimensions();
     }
 
     // Creates the piece's layout in the 2D array
@@ -176,6 +181,12 @@ public class Piece {
         }
     }
 
+    // Updates the width and height variables
+    private void updateDimensions() {
+        width = layout[0].length;
+        height = layout.length;
+    }
+
     // Test method; prints the appearance of the piece
     // 0: Empty, 1: Blue, 2: Yellow, 3: Red, 4 Green
     public void printLayout() {
@@ -186,6 +197,17 @@ public class Piece {
             }
             System.out.println();
         }
+        System.out.println("Dimensions: " + width + " x " + height);
+    }
+
+    // Getter for width
+    public int getWidth() {
+        return width;
+    }
+
+    // Getter for height
+    public int getHeight() {
+        return height;
     }
 
 }

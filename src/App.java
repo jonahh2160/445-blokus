@@ -5,12 +5,6 @@ public class App {
 
         Piece testPiece = new Piece(Piece.Type.TBLOCK, PieceColor.BLUE);
         testPiece.printLayout();
-        testPiece.rotateRight();
-        testPiece.printLayout();
-        testPiece.rotateLeft();
-        testPiece.rotateLeft();
-        testPiece.printLayout();
-        testPiece.rotateLeft();
-        testPiece.printLayout();
+        gameBoard.tryPiece(testPiece, 18, 18);
     }
 }
