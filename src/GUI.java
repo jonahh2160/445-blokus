@@ -1,19 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 //Elijah Wheat 3/24/24
-public class GUI extends JFrame {
+public class GUI extends JFrame implements MouseListener {
 
     private JPanel boardPanel;
     private GameBoard gameBoard;
+    private GameLogic gameLogic;
     private JPanel player1Panel;
     private JPanel player2Panel;
     private JLabel player1Score;
     private JLabel player2Score;
 
 
+
     public GUI() {
         gameBoard = new GameBoard();
+        gameLogic = new GameLogic();
 
 
         setTitle("Blokus Game");
@@ -42,6 +47,13 @@ public class GUI extends JFrame {
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.EAST);
 
+        // Add mouse listener to each button on the board
+        for(Component comp : boardPanel.getComponents()) {
+            if(comp instanceof JButton button) {
+                button.addMouseListener(this);
+            }
+        }
+
         setVisible(true);
     }
 
@@ -56,10 +68,13 @@ public class GUI extends JFrame {
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(30,30));
                 button.setBackground(getSpaceColor(gameBoard.getSpaceValue(i,j)));
+                int finalI = i;
+                int finalJ = j;
                 button.addActionListener(e ->{
-                    //call method to play piece
+                    //call method to play piece and need to add if statement to check valid move
+                    gameLogic.playPiece(finalI, finalJ, gameLogic.getPiece());
                     //update button color
-
+                    button.setBackground(getSpaceColor(gameBoard.getSpaceValue(finalI, finalJ)));
                 });
                 boardPanel.add(button);
             }
@@ -112,6 +127,38 @@ public class GUI extends JFrame {
 
     //method to display score
     private void createScoreLabels() {
-
+        player1Score = new JLabel("Score: 0");
+        player2Score = new JLabel("Score: 0");
     }
+
+    // MouseListener methods
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // Handle mouse click event
+        JButton clickedButton = (JButton)e.getSource();
+
+        // Get the index of the clicked button in the boardPanel
+        int index = boardPanel.getComponentZOrder(clickedButton);
+
+        // Calculate row and column based on the index
+        int row = index / 20;
+        int col = index % 20;
+
+        // Print the row and column
+        System.out.println("Clicked Button Location: Row " + row + ", Column " + col);
+    }
+
+    // Other MouseListener methods
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
+
 }
