@@ -42,7 +42,7 @@ public class GameLogic extends GUI{
 
     //My idea is using getters to pass in coordinates from the action listener for row and column
     public Boolean validFirstMove(int row, int column, Piece piece){  
-        if((row == 0 && column == 20) || (row == 0 && column == 0) || (row == 20 && column == 0) || (row == 20 && column ==20)){
+        if((row == 0 && column == 19) || (row == 0 && column == 0) || (row == 19 && column == 0) || (row == 19 && column == 19)){
                 throw new IllegalArgumentException("Must place first piece in a corner!");
                 
         }
