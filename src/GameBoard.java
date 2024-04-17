@@ -1,4 +1,4 @@
-// JH 4/11
+// JH 4/17
 
 public class GameBoard {
 
@@ -16,6 +16,35 @@ public class GameBoard {
                 board[i][j] = 0;
             }
         }
+    }
+
+    // Returns a list of Pieces for a certain color for start of game
+    public Piece[] createInvPieces(PieceColor col) {
+        Piece[] inv = new Piece[20];
+
+        inv[0] = new Piece(Piece.Type.ONE, col);
+        inv[1] = new Piece(Piece.Type.TWO, col);
+        inv[2] = new Piece(Piece.Type.THREE, col);
+        inv[3] = new Piece(Piece.Type.CORNER, col);
+        inv[4] = new Piece(Piece.Type.LINE, col);
+        inv[5] = new Piece(Piece.Type.LBLOCK, col);
+        inv[6] = new Piece(Piece.Type.ZBLOCK, col);
+        inv[7] = new Piece(Piece.Type.SQUARE, col);
+        inv[8] = new Piece(Piece.Type.TBLOCK, col);
+        inv[9] = new Piece(Piece.Type.F, col);
+        inv[10] = new Piece(Piece.Type.I, col);
+        inv[11] = new Piece(Piece.Type.L, col);
+        inv[12] = new Piece(Piece.Type.N, col);
+        inv[13] = new Piece(Piece.Type.P, col);
+        inv[14] = new Piece(Piece.Type.BIGT, col);
+        inv[15] = new Piece(Piece.Type.U, col);
+        inv[16] = new Piece(Piece.Type.V, col);
+        inv[17] = new Piece(Piece.Type.W, col);
+        inv[18] = new Piece(Piece.Type.X, col);
+        inv[19] = new Piece(Piece.Type.Y, col);
+        inv[20] = new Piece(Piece.Type.BIGZ, col);
+
+        return inv;
     }
 
     public int getSpaceValue(int x, int y) {

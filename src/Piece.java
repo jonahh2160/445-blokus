@@ -41,7 +41,7 @@ public class Piece {
     // Constructor
     public Piece(Type type, PieceColor pieceColor) {
         this.type = type;
-        this.color = pieceColor.getColor();
+        this.color = pieceColor.getColorNo();
         makeLayout(type);
         colorLayout(color);
         updateDimensions();
