@@ -1,4 +1,4 @@
-public class Player2 {
+public class Player {
 
     //Michael Toon  3/28/24
 
@@ -8,7 +8,7 @@ public class Player2 {
     int pieces;
     boolean lastPiece;
 
-    public Player2(String name, String color, double score, int pieces, boolean lastPiece) {
+    public Player(String name, String color, double score, int pieces, boolean lastPiece) {
         this.name = name;
         this.color = color;
         this.score = score;

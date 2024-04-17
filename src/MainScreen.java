@@ -46,6 +46,13 @@ public class MainScreen implements ActionListener {
     public static void main(String[] args) {
         GUI blokusGUI = new GUI();
         new MainScreen(blokusGUI);
+
+        String name;
+        String color;
+
+        if()
+
+        Player player1 = new Player(name, color, score )
     }
 
     @Override
