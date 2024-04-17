@@ -145,8 +145,8 @@ public class GUI extends JFrame implements MouseListener {
         int col = index % 20;
 
         //get top left button
-        int topLeftRow = Math.max(row - 1, 0);
-        int topLeftCol = Math.max(col - 1, 0);
+        int topLeftRow = row - 1;
+        int topLeftCol = col - 1;
 
         //print the row and column
         System.out.println("Clicked Button Location: Row " + row + ", Column " + col);
