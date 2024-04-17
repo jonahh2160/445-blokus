@@ -200,6 +200,20 @@ public class Piece {
         System.out.println("Dimensions: " + width + " x " + height);
     }
 
+    public int getCoordValue(int x, int y) {
+        return layout[y][x];
+    }
+
+    // Getter for color
+    public int getColor() {
+        return color;
+    }
+
+    // Getter for type
+    public Type getType() {
+        return type;
+    }
+
     // Getter for width
     public int getWidth() {
         return width;
