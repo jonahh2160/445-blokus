@@ -72,7 +72,7 @@ public class GUI extends JFrame implements MouseListener {
                 int finalJ = j;
                 button.addActionListener(e ->{
                     //call method to play piece and need to add if statement to check valid move
-                    gameLogic.playPiece(finalI, finalJ, gameLogic.getPiece());
+
                     //update button color
                     button.setBackground(getSpaceColor(gameBoard.getSpaceValue(finalI, finalJ)));
                 });
@@ -134,18 +134,24 @@ public class GUI extends JFrame implements MouseListener {
     // MouseListener methods
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Handle mouse click event
+        //handle mouse click event
         JButton clickedButton = (JButton)e.getSource();
 
-        // Get the index of the clicked button in the boardPanel
+        //get the index of the clicked button in the boardPanel
         int index = boardPanel.getComponentZOrder(clickedButton);
 
-        // Calculate row and column based on the index
+        //calculate row and column based on the index
         int row = index / 20;
         int col = index % 20;
 
-        // Print the row and column
+        //get top left button
+        int topLeftRow = Math.max(row - 1, 0);
+        int topLeftCol = Math.max(col - 1, 0);
+
+        //print the row and column
         System.out.println("Clicked Button Location: Row " + row + ", Column " + col);
+        //print top left button
+        System.out.println("Top-left Button Location: Row " + topLeftRow + ", Colum " + topLeftCol);
     }
 
     // Other MouseListener methods
