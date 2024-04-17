@@ -5,6 +5,6 @@ public class TestApp {
 
         Piece testPiece = new Piece(Piece.Type.TBLOCK, PieceColor.BLUE);
         testPiece.printLayout();
-        gameBoard.tryPiece(testPiece, 18, 18);
+        gameBoard.tryPiece(testPiece, 17, 18);
     }
 }
