@@ -12,7 +12,7 @@ public enum PieceColor {
         this.col = col;
     }
 
-    public int getColor() {
+    public int getColorNo() {
         return col;
     }
 }

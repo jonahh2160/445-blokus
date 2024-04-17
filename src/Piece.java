@@ -41,7 +41,7 @@ public class Piece {
     // Constructor
     public Piece(Type type, PieceColor pieceColor) {
         this.type = type;
-        this.color = pieceColor.getColor();
+        this.color = pieceColor.getColorNo();
         makeLayout(type);
         colorLayout(color);
         updateDimensions();
@@ -198,6 +198,20 @@ public class Piece {
             System.out.println();
         }
         System.out.println("Dimensions: " + width + " x " + height);
+    }
+
+    public int getCoordValue(int x, int y) {
+        return layout[y][x];
+    }
+
+    // Getter for color
+    public int getColor() {
+        return color;
+    }
+
+    // Getter for type
+    public Type getType() {
+        return type;
     }
 
     // Getter for width
