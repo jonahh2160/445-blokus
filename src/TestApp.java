@@ -1,4 +1,4 @@
-public class App {
+public class TestApp {
     public static void main(String[] args) throws Exception {
         System.out.println("Testing");
         GameBoard gameBoard = new GameBoard();
