@@ -16,12 +16,10 @@ public class GameBoard {
                 board[i][j] = 0;
             }
         }
-
-        printBoard();
     }
 
     public int getSpaceValue(int x, int y) {
-        return board[x][y];
+        return board[y][x];
     }
 
     // Returns a list of each coordinate pair where the piece would be placed
