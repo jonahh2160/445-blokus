@@ -2,13 +2,17 @@ public class GameFlow {
     Boolean gameOver = false;
     GameBoard gameBoard;
     GameLogic logic; 
+    //May not need numberOfPieces if keep track of endgame through boolean condition or something else
     int numberOfPieces = 21;
     PieceColor color;
+    PieceColor red;
+    PieceColor blue;
+    PieceColor green;
+    PieceColor yellow;
     Piece piece;
     GUI clicked; 
 
-    void createSinglePlayerGame(GameBoard gameBoard, PieceColor red, PieceColor blue,
-            PieceColor green, PieceColor yellow,int numberOfPieces) {
+    void createSinglePlayerGame(GameBoard gameBoard) {
 
 
         for(int i = 0; i == 1; i++){
@@ -31,8 +35,9 @@ public class GameFlow {
 
     }
 
-    void createTwoPlayerGame(GameBoard gameBoard, PieceColor red, PieceColor blue,
-            PieceColor green, PieceColor yellow,int numberOfPieces) {
+    //void createTwoPlayerGame(GameBoard gameBoard, PieceColor red, PieceColor blue,
+            //PieceColor green, PieceColor yellow,int numberOfPieces) {
+                //Place first move check up front instead of calling firstPlayerTurn
 
         for(int i = 0; i == 1; i++){
             firstPlayerTurn(red, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());

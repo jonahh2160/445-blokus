@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 public class MainScreen implements ActionListener {
 
     private final GUI blokusGUI; // EW
+    GameFlow gameflow; // MT
 
     public MainScreen(GUI blokusGUI) {
 
@@ -61,9 +62,11 @@ public class MainScreen implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Start Single Player Game!")) {
             // Code to call Single Player Game
+            gameflow.createSinglePlayerGame();
             System.out.println("Starting Single Player Game!");
         } else if (e.getActionCommand().equals(" Start Multi-player Game! ")) {
             // Code to call Multiplayer Game
+            gameFlow.createTwoPlayerGame();
             System.out.println("Starting Multiplayer Game!");
         }
         blokusGUI.setVisible(true);
