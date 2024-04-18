@@ -64,6 +64,15 @@ public class GameFlow {
 
     // JH: Runs GameBoard's calculate score method to declare a winner
     void chooseWinner(Piece lastBlue, Piece lastYellow, Piece lastRed, Piece lastGreen) {
-        // Logic for choosing the winner
+        int scoreP1 = gameBoard.calcScoreP1(lastBlue, lastRed);
+        int scoreP2 = gameBoard.calcScoreP2(lastYellow, lastGreen);
+
+        if (scoreP1 > scoreP2) {
+            // TODO: P1 wins logic
+        } else if (scoreP1 == scoreP2) {
+            // TODO: Draw logic
+        } else {
+            // TODO: P2 wins logic
+        }
     }
 }
