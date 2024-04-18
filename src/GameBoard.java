@@ -7,6 +7,9 @@ public class GameBoard {
     // Instantiate variables
     private int[][] board;
 
+    //MT added to maybe do implementation check for first move, want feedback, being used in placeFirstPiece() below;
+    GameLogic gameLogic;
+
     // Constructor
     public GameBoard() {
         // Initialize the board of 400 squares
@@ -61,6 +64,9 @@ public class GameBoard {
         if (x + w > board[0].length || y + h > board.length) {
             System.out.println("FAILURE: Board dimensions are " + board[0].length + " x " + board.length + "!");
             // TODO: Throw error here?
+            //MT: Hey Jonah I added the code below if you want to just throw an illegal argument exception, if wanna use 
+            //Just uncomment it and delete your return null
+            // throw new IllegalArgumentException("FAILURE: Board dimensions are " + board[0].length + " x " + board.length + "!");
             return null;
         } else {
             // Keep track of the current coordinate pair separately
@@ -105,6 +111,34 @@ public class GameBoard {
             }
         }
     }
+
+    //MT let me know what ya'll think but thinking inserting firstMove check in the method and using an initial loop to check all first move for four colors
+    //Then entering a while loop that doesn't end til game over variable is set to true. See create game methods in GameFlow class for implementation
+    public void placeFirstPiece(Piece piece, int x, int y) {
+        int w = piece.getWidth();
+        int h = piece.getHeight();
+        int col = piece.getColor();
+
+        //Mt: Added check for first move
+        gameLogic.validFirstMove(piece, x, y);
+
+        // Check if the piece would go out of bounds
+        if (x + w > board[0].length || y + h > board.length) {
+            System.out.println("FAILURE: Board dimensions are " + board[0].length + " x " + board.length + "!");
+            // TODO: Throw error here?
+            return;
+        } else {
+            // Overwrite cells in the game board
+            for (int i = 0; i < w; i++) {
+                for (int j = 0; j < h; j++) {
+                    if (piece.getCoordValue(i, j) != 0) {
+                        board[y + j][x + i] = col;
+                    }
+                }
+            }
+        }
+    }
+
 
     // Iterates through the board to calculate P1's score
     public int calcScoreP1(Piece lastBlue, Piece lastRed) {
