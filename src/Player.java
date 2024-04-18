@@ -1,16 +1,16 @@
 public class Player {
 
-    //Michael Toon  3/28/24
+    // Michael Toon 3/28/24
 
-    String name;
-    String color;
-    double score;
-    int pieces;
-    boolean lastPiece;
+    private String name;
+    private int color;
+    private double score;
+    private int pieces;
+    private boolean lastPiece;
 
-    public Player(String name, String color, double score, int pieces, boolean lastPiece) {
+    public Player(String name, PieceColor color, double score, int pieces, boolean lastPiece) {
         this.name = name;
-        this.color = color;
+        this.color = color.getColorNo();
         this.score = score;
         this.pieces = pieces;
         lastPiece = false;
@@ -24,12 +24,12 @@ public class Player {
         this.name = newName;
     }
 
-    public String getColor() {
+    public int getColor() {
         return color;
     }
 
-    public void setColor(String newColor) {
-        this.color = newColor;
+    public void setColor(PieceColor newColor) {
+        this.color = newColor.getColorNo();
     }
 
     public double getScore() {
