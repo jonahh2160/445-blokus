@@ -107,51 +107,75 @@ public class GameBoard {
     }
 
     // Iterates through the board to calculate P1's score
-    public int calcScoreP1(Piece lastPiece) {
-        int score = -89;
+    public int calcScoreP1(Piece lastBlue, Piece lastRed) {
+        // Minimum scores: -89 blue and -89 red
+        int scoreBlue = -89;
+        int scoreRed = -89;
 
         // Count the number of Blue and Red squares
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == 1 || board[i][j] == 3) {
-                    score++;
+                if (board[i][j] == 1) {
+                    scoreBlue++;
+                } else if (board[i][j] == 3) {
+                    scoreRed++;
                 }
             }
         }
 
-        // If there are no pieces remaining, assign bonus points
-        if (score == 0) {
-            score += 15;
-            if (lastPiece.getType().equals(Piece.Type.ONE)) {
-                score += 5;
+        // If there are no blue pieces remaining, assign bonus points
+        if (scoreBlue == 0) {
+            scoreBlue += 15;
+            if (lastBlue.getType().equals(Piece.Type.ONE)) {
+                scoreBlue += 5;
             }
         }
 
-        return score;
+        // If there are no red pieces remaining, assign bonus points
+        if (scoreRed == 0) {
+            scoreRed += 15;
+            if (lastRed.getType().equals(Piece.Type.ONE)) {
+                scoreRed += 5;
+            }
+        }
+
+        return scoreBlue + scoreRed;
     }
 
     // Iterates through the board to calculate P2's score
-    public int calcScoreP2(Piece lastPiece) {
-        int score = -89;
+    public int calcScoreP2(Piece lastYellow, Piece lastGreen) {
+        // Minimum scores: -89 yellow and -89 green
+        int scoreYellow = -89;
+        int scoreGreen = -89;
 
-        // Count the number of Blue and Red squares
+        // Count the number of Yellow and Green squares
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == 2 || board[i][j] == 4) {
-                    score++;
+                if (board[i][j] == 2) {
+                    scoreYellow++;
+                } else if (board[i][j] == 4) {
+                    scoreGreen++;
                 }
             }
         }
 
-        // If there are no pieces remaining, assign bonus points
-        if (score == 0) {
-            score += 15;
-            if (lastPiece.getType().equals(Piece.Type.ONE)) {
-                score += 5;
+        // If there are no yellow pieces remaining, assign bonus points
+        if (scoreYellow == 0) {
+            scoreYellow += 15;
+            if (lastYellow.getType().equals(Piece.Type.ONE)) {
+                scoreYellow += 5;
             }
         }
 
-        return score;
+        // If there are no green pieces remaining, assign bonus points
+        if (scoreGreen == 0) {
+            scoreGreen += 15;
+            if (lastGreen.getType().equals(Piece.Type.ONE)) {
+                scoreGreen += 5;
+            }
+        }
+
+        return scoreYellow + scoreGreen;
     }
 
     // Test method: print the status of the board

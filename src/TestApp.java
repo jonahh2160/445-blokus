@@ -6,12 +6,12 @@ public class TestApp {
 
         Piece testPiece = new Piece(Piece.Type.TBLOCK, PieceColor.BLUE);
         gameboard.printBoard();
-        // testPiece.printLayout();
-        // gameboard.tryPiece(testPiece, 17, 18);
-        // gameboard.placePiece(testPiece, 17, 18);
-        // gameboard.printBoard();
-        // System.out.println("P1 Score: " + gameboard.calcScoreP1(testPiece));
-        // System.out.println("P2 Score: " + gameboard.calcScoreP2(testPiece));
+        testPiece.printLayout();
+        gameboard.tryPiece(testPiece, 17, 18);
+        gameboard.placePiece(testPiece, 17, 18);
+        gameboard.printBoard();
+        System.out.println("P1 Score: " + gameboard.calcScoreP1(testPiece, testPiece));
+        System.out.println("P2 Score: " + gameboard.calcScoreP2(testPiece, testPiece));
 
         // testPiece.rotateLeft();
         // testPiece.rotateLeft();
