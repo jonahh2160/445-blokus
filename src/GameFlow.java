@@ -2,31 +2,33 @@ public class GameFlow {
     Boolean gameOver = false;
     GameBoard gameBoard;
     GameLogic logic; 
-    //May not need numberOfPieces if keep track of endgame through boolean condition or something else
-    int numberOfPieces = 21;
-    PieceColor color;
-    PieceColor red;
-    PieceColor blue;
-    PieceColor green;
-    PieceColor yellow;
+    PieceColor blue = PieceColor.BLUE;
+    PieceColor yellow = PieceColor.YELLOW;
+    PieceColor red = PieceColor.RED;
+    PieceColor green = PieceColor.GREEN;
+    Piece[] invBlue, invRed, invGreen, invYellow;
     Piece piece;
     GUI clicked; 
 
     void createSinglePlayerGame(GameBoard gameBoard) {
 
+        invBlue = gameBoard.createInvPieces(blue);
+        invGreen = gameBoard.createInvPieces(green);
+        invRed = gameBoard.createInvPieces(red);
+        invYellow = gameBoard.createInvPieces(yellow);
 
         for(int i = 0; i == 1; i++){
-            firstPlayerTurn(red, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(blue, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(green, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(yellow, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
         }
 
         while (!gameOver) {
-            playerTurn(red, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            playerTurn(blue, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            playerTurn(green, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            playerTurn(yellow, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
             endGameCheck();
 
             // player1Turn(player, numberOfPieces);
@@ -35,23 +37,27 @@ public class GameFlow {
 
     }
 
-    //void createTwoPlayerGame(GameBoard gameBoard, PieceColor red, PieceColor blue,
-            //PieceColor green, PieceColor yellow,int numberOfPieces) {
-                //Place first move check up front instead of calling firstPlayerTurn
+    void createTwoPlayerGame(GameBoard gameBoard, PieceColor red, PieceColor blue,PieceColor green, PieceColor yellow,int numberOfPieces) {
+        //Place first move check up front instead of calling firstPlayerTur
+
+        invBlue = gameBoard.createInvPieces(blue);
+        invGreen = gameBoard.createInvPieces(green);
+        invRed = gameBoard.createInvPieces(red);
+        invYellow = gameBoard.createInvPieces(yellow);
 
         for(int i = 0; i == 1; i++){
-            firstPlayerTurn(red, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(blue, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(green, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(yellow, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
+            firstPlayerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
                 }
 
         while (!gameOver) {
 
-            playerTurn(red, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            playerTurn(blue, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            playerTurn(green, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
-            playerTurn(yellow, piece, numberOfPieces, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
+            playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
             endGameCheck();
 
             // player1Turn(player1, numberOfPieces);
@@ -61,25 +67,29 @@ public class GameFlow {
     }
 
     // MT: trying to work through logic of player turn
-    void playerTurn(PieceColor color, Piece piece, int numberOfPieces, GameBoard gameBoard, int xCoordinate, int yCoordinate) {
+    void playerTurn(PieceColor color, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate) {
         //Selects piece to play
         logic.pieceSelect(piece);
         //Places piece on board
         gameBoard.placePiece(piece, xCoordinate, yCoordinate);
         //Maybe don't even need this if use noMove boolean to trigger end of game? 
-        numberOfPieces -= numberOfPieces;
+    
         
 
     }
 
     //MT: Turn method that is executed for all four colors in the initial loop to check for legal first moves
-    void firstPlayerTurn(PieceColor color, Piece piece, int numberOfPiecesj, GameBoard gameBoard, int xCoordinate, int yCoordinate){
+    void firstPlayerTurn(PieceColor color, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate){
            //Selects piece to play
            logic.pieceSelect(piece);
-           //Places piece on board
-           gameBoard.placeFirstPiece(piece, xCoordinate, yCoordinate);
+           // JH: Checks if th epiee is a legal irst move and if so places it
+           if(logic.validFirstMove(piece, xCoordinate, yCoordinate)){
+            gameBoard.placePiece(piece, xCoordinate, yCoordinate);
+           } else {
+            throw new IllegalArgumentException("FAILURE: Illegal first move!");
+           } 
            //Maybe don't even need this if use noMove boolean to trigger end of game? 
-           numberOfPieces -= numberOfPieces;
+           
     }
 
     //Mt maybe set noMoves boolean that gets triggered by skip button click or something and after every gameloop call to check all colors noMoves status
@@ -93,6 +103,7 @@ public class GameFlow {
     }
 
     void endGame() {
+        // TODO: If the list of possible moves is empty, or there are no pieces remaining, then endGame()
         // Logic for player turn;
     }
 
