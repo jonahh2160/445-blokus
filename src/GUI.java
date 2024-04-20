@@ -181,21 +181,40 @@ public class GUI extends JFrame implements MouseListener {
     //MouseListener methods
     @Override
     public void mouseClicked(MouseEvent e) {
+        //Get the clicked button
         JButton clickedButton = (JButton) e.getSource();
+
+        //Calculate the row and column of the clicked button based on its index in the board panel
         int index = boardPanel.getComponentZOrder(clickedButton);
+        int row = index / 20; // Number of columns on the board
+        int col = index % 20; // Number of rows on the board
 
-        //Calculate row and column based on the index
-        int row = index / 20;
-        int col = index % 20;
+        //Determine the piece to place and its type and color
+        //For demonstration purposes, we'll use a sample piece and color
+        //You should replace these with the correct piece based on the game state
+        Piece pieceToPlace = new Piece(Piece.Type.ONE, PieceColor.BLUE);
 
-        //Get top left button
-        int topLeftRow = row - 1;
-        int topLeftCol = col - 1;
+        //Place the piece on the game board at the calculated position (col, row)
+        gameBoard.placePiece(pieceToPlace, col, row);
 
-        //Handle the button click event
-        //For example, place a piece on the board and update the button background color
-        gameBoard.placePiece(new Piece(Piece.Type.ONE, PieceColor.BLUE), col, row);
-        clickedButton.setBackground(getSpaceColor(gameBoard.getSpaceValue(row, col)));
+        //Update the background color of each button in the piece's shape
+        int pieceWidth = pieceToPlace.getWidth();
+        int pieceHeight = pieceToPlace.getHeight();
+
+        //Iterate through the piece's shape
+        for (int i = 0; i < pieceWidth; i++) {
+            for (int j = 0; j < pieceHeight; j++) {
+                //Check if the piece should be placed at this position
+                if (pieceToPlace.getCoordValue(i, j) != 0) {
+                    //Calculate the button index in the board panel
+                    int buttonIndex = (row + j) * 20 + (col + i);
+                    //Get the button at this index
+                    JButton button = (JButton) boardPanel.getComponent(buttonIndex);
+                    //Update the button's background color based on the piece's color
+                    button.setBackground(getSpaceColor(gameBoard.getSpaceValue(row + j, col + i)));
+                }
+            }
+        }
     }
 
     @Override
