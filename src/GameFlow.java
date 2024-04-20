@@ -1,3 +1,4 @@
+// MT 
 public class GameFlow {
     Boolean gameOver = false;
     GameBoard gameBoard;
@@ -8,6 +9,10 @@ public class GameFlow {
     PieceColor green = PieceColor.GREEN;
     Piece[] invBlue, invRed, invGreen, invYellow;
     Piece piece;
+    Piece lastPieceRed;
+    Piece lastPieceBlue;
+    Piece lastPieceGreen;
+    Piece lastPieceYellow;
     GUI clicked; 
 
     void createSinglePlayerGame(GameBoard gameBoard) {
@@ -18,11 +23,15 @@ public class GameFlow {
         invYellow = gameBoard.createInvPieces(yellow);
 
         for(int i = 0; i == 1; i++){
-            firstPlayerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
-        }
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
+            }
 
         while (!gameOver) {
             playerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
@@ -30,27 +39,26 @@ public class GameFlow {
             playerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
             playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
             endGameCheck();
-
-            // player1Turn(player, numberOfPieces);
-            // cpuTurn(cpu);
         }
 
     }
 
-    void createTwoPlayerGame(GameBoard gameBoard, PieceColor red, PieceColor blue,PieceColor green, PieceColor yellow,int numberOfPieces) {
-        //Place first move check up front instead of calling firstPlayerTur
-
+    void createTwoPlayerGame(GameBoard gameBoard) {
         invBlue = gameBoard.createInvPieces(blue);
         invGreen = gameBoard.createInvPieces(green);
         invRed = gameBoard.createInvPieces(red);
         invYellow = gameBoard.createInvPieces(yellow);
 
         for(int i = 0; i == 1; i++){
-            firstPlayerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
-            firstPlayerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
-                }
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(blue, piece, gameBoard, clicked.getX(), clicked.getY());
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
+            logic.validFirstMove(piece, clicked.getX(), clicked.getY());
+            playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
+            }
 
         while (!gameOver) {
 
@@ -60,51 +68,48 @@ public class GameFlow {
             playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
             endGameCheck();
 
-            // player1Turn(player1, numberOfPieces);
-            // player2Turn(player2, numberOfPieces);
-
         }
     }
 
     // MT: trying to work through logic of player turn
     void playerTurn(PieceColor color, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate) {
+        //Here we'll place Jonah's method to check for available moves first
+        setLastPieceAs(color, piece);
         //Selects piece to play
         logic.pieceSelect(piece);
         //Places piece on board
         gameBoard.placePiece(piece, xCoordinate, yCoordinate);
-        //Maybe don't even need this if use noMove boolean to trigger end of game? 
-    
+        
+    }
+
+    void setLastPieceAs(PieceColor color, Piece piece){
+        if(color == red){
+            lastPieceRed = piece;
+        } else if(color == blue){
+            lastPieceBlue = piece;
+        } else if(color == green){
+            lastPieceGreen = piece;
+        } else {
+            lastPieceYellow = piece;
+        }
+    }
+
+    //Mt Still need to configure for what Jonah's method is returning to make gameOverSignifier equivalent to it
+    void endGameCheck(){
+        //MT here we'll check whatever Jonah's method return and depending on it returns execute logic
+        String gameOverSignifier = " ";
+        //gameOverSignifier = logic.findMove();
+        if( gameOverSignifier == null){
+             endGame();
+        } 
+        
         
 
     }
 
-    //MT: Turn method that is executed for all four colors in the initial loop to check for legal first moves
-    void firstPlayerTurn(PieceColor color, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate){
-           //Selects piece to play
-           logic.pieceSelect(piece);
-           // JH: Checks if th epiee is a legal irst move and if so places it
-           if(logic.validFirstMove(piece, xCoordinate, yCoordinate)){
-            gameBoard.placePiece(piece, xCoordinate, yCoordinate);
-           } else {
-            throw new IllegalArgumentException("FAILURE: Illegal first move!");
-           } 
-           //Maybe don't even need this if use noMove boolean to trigger end of game? 
-           
-    }
-
-    //Mt maybe set noMoves boolean that gets triggered by skip button click or something and after every gameloop call to check all colors noMoves status
-    //IF all statuses are set to true for noMoves then the endGame() function is called
-    void endGameCheck(){
-        //Idea is to have a boolean set on color/player for noMoves that is initially set to false
-        //Create a noMoves check method that calls getters for that variable and when all are set to true 
-        //We call the endGame() and calc scores
-        endGame();
-
-    }
-
     void endGame() {
-        // TODO: If the list of possible moves is empty, or there are no pieces remaining, then endGame()
-        // Logic for player turn;
+        gameOver = true;
+        chooseWinner(lastPieceRed, lastPieceBlue, lastPieceGreen, lastPieceYellow);
     }
 
     // JH: Runs GameBoard's calculate score method to declare a winner
