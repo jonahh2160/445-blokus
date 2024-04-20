@@ -5,13 +5,16 @@ public class TestApp {
         GameLogic gamelogic = new GameLogic();
 
         Piece testPiece = new Piece(Piece.Type.TBLOCK, PieceColor.BLUE);
-        gameboard.printBoard();
         testPiece.printLayout();
         gameboard.tryPiece(testPiece, 17, 18);
         gameboard.placePiece(testPiece, 17, 18);
         gameboard.printBoard();
-        System.out.println("P1 Score: " + gameboard.calcScoreP1(testPiece, testPiece));
-        System.out.println("P2 Score: " + gameboard.calcScoreP2(testPiece, testPiece));
+        System.out.println(gameboard.isPieceLegal(testPiece, 15, 16));
+
+        // System.out.println("P1 Score: " + gameboard.calcScoreP1(testPiece,
+        // testPiece));
+        // System.out.println("P2 Score: " + gameboard.calcScoreP2(testPiece,
+        // testPiece));
 
         // testPiece.rotateLeft();
         // testPiece.rotateLeft();

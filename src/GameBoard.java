@@ -7,10 +7,6 @@ public class GameBoard {
     // Instantiate variables
     private int[][] board;
 
-    // MT added to maybe do implementation check for first move, want feedback,
-    // being used in placeFirstPiece() below;
-    GameLogic gameLogic;
-
     // Constructor
     public GameBoard() {
         // Initialize the board of 400 squares
@@ -59,6 +55,31 @@ public class GameBoard {
         return board[y][x];
     }
 
+    public boolean isPieceLegal(Piece piece, int x, int y) {
+        int w = piece.getWidth();
+        int h = piece.getHeight();
+        int col = piece.getColor();
+
+        // Check if the piece would go out of bounds
+        if (x + w > board[0].length || y + h > board.length) {
+            return false;
+        }
+
+        // Check if affected spaces are occupied
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                if (getSpaceValue(x + i, y + j) != 0) {
+                    return false;
+                }
+            }
+        }
+
+        // TODO: Check if the piece establishes corner-contact with its own color
+        // Get the line to each side of the piece
+
+        return true;
+    }
+
     // Returns a list of each coordinate pair where the piece would be placed
     public int[][] tryPiece(Piece piece, int x, int y) {
         int w = piece.getWidth();
@@ -67,8 +88,7 @@ public class GameBoard {
 
         // Check if the piece would go out of bounds
         if (x + w > board[0].length || y + h > board.length) {
-            throw new IllegalArgumentException(
-                    "FAILURE: Board dimensions are " + board[0].length + " x " + board.length + "!");
+            throw new IllegalArgumentException("Piece placement would go out of bounds!");
         } else {
             // Keep track of the current coordinate pair separately
             int pairNo = 0;
@@ -98,12 +118,12 @@ public class GameBoard {
 
         // Check if the piece would go out of bounds
         if (x + w > board[0].length || y + h > board.length) {
-            throw new IllegalArgumentException(
-                    "FAILURE: Board dimensions are " + board[0].length + " x " + board.length + "!");
+            throw new IllegalArgumentException("Piece placement would go out of bounds!");
         } else {
             // Overwrite cells in the game board
             for (int i = 0; i < w; i++) {
                 for (int j = 0; j < h; j++) {
+                    // Only color parts of the piece that AREN'T 0 in its layout
                     if (piece.getCoordValue(i, j) != 0) {
                         board[y + j][x + i] = col;
                     }
