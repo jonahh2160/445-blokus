@@ -190,8 +190,6 @@ public class GUI extends JFrame implements MouseListener {
         int col = index % 20; // Number of rows on the board
 
         //Determine the piece to place and its type and color
-        //For demonstration purposes, we'll use a sample piece and color
-        //You should replace these with the correct piece based on the game state
         Piece pieceToPlace = new Piece(Piece.Type.ONE, PieceColor.BLUE);
 
         //Place the piece on the game board at the calculated position (col, row)
