@@ -1,20 +1,21 @@
 // MT 
 public class GameFlow {
-    Boolean gameOver = false;
-    GameBoard gameBoard;
-    GameLogic logic; 
-    PieceColor blue = PieceColor.BLUE;
-    PieceColor yellow = PieceColor.YELLOW;
-    PieceColor red = PieceColor.RED;
-    PieceColor green = PieceColor.GREEN;
+    private GUI clicked; 
+    private GUI blokusGUI;
+    private GameBoard gameBoard;
+    private GameLogic logic; 
+    private Boolean gameOver = false;
+    private PieceColor blue = PieceColor.BLUE;
+    private PieceColor yellow = PieceColor.YELLOW;
+    private PieceColor red = PieceColor.RED;
+    private PieceColor green = PieceColor.GREEN;
+    private Piece piece;
+    private Piece lastPieceRed;
+    private Piece lastPieceBlue;
+    private Piece lastPieceGreen;
+    private Piece lastPieceYellow;
     Piece[] invBlue, invRed, invGreen, invYellow;
-    Piece piece;
-    Piece lastPieceRed;
-    Piece lastPieceBlue;
-    Piece lastPieceGreen;
-    Piece lastPieceYellow;
-    GUI clicked; 
-    GUI blokusGUI;
+    
 
     void createSinglePlayerGame(GameBoard gameBoard) {
 
@@ -75,14 +76,16 @@ public class GameFlow {
     // MT: trying to work through logic of player turn
     void playerTurn(PieceColor color, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate) {
         //Here we'll place Jonah's method to check for available moves first
-        setLastPieceAs(color, piece);
         //Selects piece to play
         logic.pieceSelect(piece);
         //Places piece on board
         gameBoard.placePiece(piece, xCoordinate, yCoordinate);
+        //Method to keep track of last piece for each color
+        setLastPieceAs(color, piece);
         
     }
 
+    //MT method to update the last piece placed for each color
     void setLastPieceAs(PieceColor color, Piece piece){
         if(color == red){
             lastPieceRed = piece;
@@ -120,12 +123,5 @@ public class GameFlow {
         //MT creates new End Game Screen, handles different scenarios of scores itself
         new EndGameScreen(scoreP1, scoreP2, blokusGUI);
 
-        //if (scoreP1 > scoreP2) {
-            // TODO: P1 wins logic
-        //} else if (scoreP1 == scoreP2) {
-            // TODO: Draw logic
-        //} else {
-            // TODO: P2 wins logic
-        //}
     }
 }

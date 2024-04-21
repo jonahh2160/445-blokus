@@ -56,7 +56,6 @@ public class EndGameScreen implements ActionListener{
         quitButtonPanel.add(quitPlayingButton);
         panel.add(quitPlayingButton, gbc);
     
-        //blokusGUI.setVisible(false);
         frame.setVisible(true);
     
         }
