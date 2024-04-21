@@ -1,9 +1,9 @@
 // MT 
 public class GameFlow {
-    private GUI clicked; 
+    private GUI clicked;
     private GUI blokusGUI;
     private GameBoard gameBoard;
-    private GameLogic logic; 
+    private GameLogic logic;
     private Boolean gameOver = false;
     private PieceColor blue = PieceColor.BLUE;
     private PieceColor yellow = PieceColor.YELLOW;
@@ -16,7 +16,7 @@ public class GameFlow {
     private Piece lastPieceYellow;
     Piece[] invBlue, invRed, invGreen, invYellow;
     EndGameScreen endGameScreen;
-    
+
 
     void createSinglePlayerGame(GameBoard gameBoard) {
 
@@ -24,6 +24,11 @@ public class GameFlow {
         invGreen = gameBoard.createInvPieces(green);
         invRed = gameBoard.createInvPieces(red);
         invYellow = gameBoard.createInvPieces(yellow);
+
+        if (clicked == null) {
+            System.out.println("Error: clicked is null in createOnePlayerGame.");
+            return; // Exit the method early
+        }
 
         for(int i = 0; i == 1; i++){
             logic.validFirstMove(piece, clicked.getX(), clicked.getY());
@@ -34,7 +39,7 @@ public class GameFlow {
             playerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
             logic.validFirstMove(piece, clicked.getX(), clicked.getY());
             playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
-            }
+        }
 
         while (!gameOver) {
             playerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
@@ -52,6 +57,11 @@ public class GameFlow {
         invRed = gameBoard.createInvPieces(red);
         invYellow = gameBoard.createInvPieces(yellow);
 
+        if (clicked == null) {
+            System.out.println("Error: clicked is null in createTwoPlayerGame.");
+            return; // Exit the method early
+        }
+
         for(int i = 0; i == 1; i++){
             logic.validFirstMove(piece, clicked.getX(), clicked.getY());
             playerTurn(red, piece, gameBoard, clicked.getX(), clicked.getY());
@@ -61,7 +71,7 @@ public class GameFlow {
             playerTurn(green, piece, gameBoard, clicked.getX(), clicked.getY());
             logic.validFirstMove(piece, clicked.getX(), clicked.getY());
             playerTurn(yellow, piece, gameBoard, clicked.getX(), clicked.getY());
-            }
+        }
 
         while (!gameOver) {
 
@@ -83,7 +93,7 @@ public class GameFlow {
         gameBoard.placePiece(piece, xCoordinate, yCoordinate);
         //Method to keep track of last piece for each color
         setLastPieceAs(color, piece);
-        
+
     }
 
     //MT method to update the last piece placed for each color
@@ -105,8 +115,8 @@ public class GameFlow {
         String gameOverSignifier = " ";
         //gameOverSignifier = logic.findMove();
         if( gameOverSignifier == null){
-             endGame();
-        } 
+            endGame();
+        }
 
     }
 
