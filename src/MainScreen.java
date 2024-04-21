@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 public class MainScreen implements ActionListener {
 
     private final GUI blokusGUI; // EW
-    GameFlow gameflow; // MT
-    GameBoard gameBoard; // MT
+    private GameFlow gameflow; // MT
+    private GameBoard gameBoard; // MT
 
     public MainScreen(GUI blokusGUI) {
 

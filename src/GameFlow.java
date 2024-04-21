@@ -14,6 +14,7 @@ public class GameFlow {
     Piece lastPieceGreen;
     Piece lastPieceYellow;
     GUI clicked; 
+    GUI blokusGUI;
 
     void createSinglePlayerGame(GameBoard gameBoard) {
 
@@ -109,20 +110,22 @@ public class GameFlow {
 
     void endGame() {
         gameOver = true;
-        chooseWinner(lastPieceRed, lastPieceBlue, lastPieceGreen, lastPieceYellow);
+        chooseWinner(lastPieceRed, lastPieceBlue, lastPieceGreen, lastPieceYellow, blokusGUI);
     }
 
     // JH: Runs GameBoard's calculate score method to declare a winner
-    void chooseWinner(Piece lastBlue, Piece lastYellow, Piece lastRed, Piece lastGreen) {
+    void chooseWinner(Piece lastBlue, Piece lastYellow, Piece lastRed, Piece lastGreen, GUI blokusGUI) {
         int scoreP1 = gameBoard.calcScoreP1(lastBlue, lastRed);
         int scoreP2 = gameBoard.calcScoreP2(lastYellow, lastGreen);
+        //MT creates new End Game Screen, handles different scenarios of scores itself
+        new EndGameScreen(scoreP1, scoreP2, blokusGUI);
 
-        if (scoreP1 > scoreP2) {
+        //if (scoreP1 > scoreP2) {
             // TODO: P1 wins logic
-        } else if (scoreP1 == scoreP2) {
+        //} else if (scoreP1 == scoreP2) {
             // TODO: Draw logic
-        } else {
+        //} else {
             // TODO: P2 wins logic
-        }
+        //}
     }
 }
