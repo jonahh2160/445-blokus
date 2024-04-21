@@ -1,3 +1,5 @@
+// MT 4/10
+
 public class GameLogic {
 
     Piece piece;
@@ -53,6 +55,17 @@ public class GameLogic {
         } else {
             return false;
         }
+    }
+
+    // AR, JH: Returns the first valid move for a certain color it finds
+    public Move findMove(Piece[] inv, GameBoard gameboard) {
+        // TODO: Detect corners of the same color
+        // TODO: Then try placing every piece left in the inventory in every orientation
+        // TODO: Return the first move that works
+
+        // return new Move(piece, x, y);
+
+        return null;
     }
 
 }
