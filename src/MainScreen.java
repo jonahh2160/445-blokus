@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 //Michael Toon 3/28/24
 
-public class MainScreen implements ActionListener {
+public class MainScreen extends JFrame implements ActionListener {
 
     private final GUI blokusGUI; // EW
     private GameFlow gameflow; // MT

@@ -15,6 +15,7 @@ public class GameFlow {
     private Piece lastPieceGreen;
     private Piece lastPieceYellow;
     Piece[] invBlue, invRed, invGreen, invYellow;
+    EndGameScreen endGameScreen;
     
 
     void createSinglePlayerGame(GameBoard gameBoard) {
@@ -106,8 +107,6 @@ public class GameFlow {
         if( gameOverSignifier == null){
              endGame();
         } 
-        
-        
 
     }
 
@@ -121,7 +120,8 @@ public class GameFlow {
         int scoreP1 = gameBoard.calcScoreP1(lastBlue, lastRed);
         int scoreP2 = gameBoard.calcScoreP2(lastYellow, lastGreen);
         //MT creates new End Game Screen, handles different scenarios of scores itself
-        new EndGameScreen(scoreP1, scoreP2, blokusGUI);
+        EndGameScreen endGameScreen = new EndGameScreen(scoreP1, scoreP2, blokusGUI);
+        endGameScreen.setVisible(true);
 
     }
 }

@@ -4,8 +4,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EndGameScreen implements ActionListener{
-    private final GUI blokusGUI;
+public class EndGameScreen extends JFrame implements ActionListener{
+    private GUI blokusGUI;
+    private MainScreen mainScreen;
     
     public EndGameScreen(int scoreP1, int scoreP2, GUI blokusGUI) {
         this.blokusGUI = blokusGUI;
@@ -28,9 +29,8 @@ public class EndGameScreen implements ActionListener{
         JLabel declareTheWinner;
         if(scoreP1 > scoreP2){
             declareTheWinner = new JLabel("THE WINNER IS " + p1 + "!!!!!!!!!!!!!!!!!!!!!!!");
-        } else if( scoreP1 < scoreP2){
+        } else if(scoreP1 < scoreP2){
             declareTheWinner = new JLabel("THE WINNER IS " + p2 + "!!!!!!!!!!!!!!!!!!!!!!!");
-    
         } else{
             declareTheWinner = new JLabel("EVERYONE WINS!!!!!!!!!!!!!!!");
         }
@@ -64,7 +64,9 @@ public class EndGameScreen implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("Play Again!")) {
                 // Code to recall Main Screen I think
-                new MainScreen(blokusGUI);
+                mainScreen = new MainScreen(blokusGUI);
+                mainScreen.setVisible(true);
+
             } else if (e.getActionCommand().equals(" Quit Playing! ")) {
                 // Code to close the application
                 System.exit(0);
