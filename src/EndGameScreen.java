@@ -5,11 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class EndGameScreen extends JFrame implements ActionListener{
-    private GUI blokusGUI;
     private MainScreen mainScreen;
     
     public EndGameScreen(int scoreP1, int scoreP2, GUI blokusGUI) {
-        this.blokusGUI = blokusGUI;
+        mainScreen = new MainScreen(blokusGUI);
         final String p1 ="Player 1";
         final String p2 = "Player 2";
     
@@ -64,7 +63,6 @@ public class EndGameScreen extends JFrame implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("Play Again!")) {
                 // Code to recall Main Screen I think
-                mainScreen = new MainScreen(blokusGUI);
                 mainScreen.setVisible(true);
 
             } else if (e.getActionCommand().equals(" Quit Playing! ")) {
