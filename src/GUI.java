@@ -43,16 +43,18 @@ public class GUI extends JFrame implements MouseListener {
 
     //Method to create the game board panel
     private void createBoardPanel() {
-        boardPanel = new JPanel(new GridLayout(20, 20));
+        boardPanel = new JPanel(new GridLayout(20, 20));  //20,20
         boardPanel.setPreferredSize(new Dimension(600, 600));
 
         //Create buttons for the game board
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
                 JButton button = new JButton();
-                button.setPreferredSize(new Dimension(30, 30));
+                button.setPreferredSize(new Dimension(30,30));   //(30, 30)
                 button.setBackground(getPieceColor(gameBoard.getSpaceValue(i, j)));
                 button.addMouseListener(this);
+
+
                 boardPanel.add(button);
             }
         }
@@ -211,7 +213,7 @@ public class GUI extends JFrame implements MouseListener {
 
     //MT added trying to work through png's
     private Icon createBlockImage(Piece peice, Color color){
-        int imageSize = 40;
+        int imageSize = 30;
         String imagePath= "";
 
         if(color == Color.BLUE){
