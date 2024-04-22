@@ -59,8 +59,40 @@ public class GameLogic {
 
     // AR, JH: Returns the first valid move for a certain color it finds
     public Move findMove(Piece[] inv, GameBoard gameboard) {
-        // TODO: Detect corners of the same color
-        // TODO: Then try placing every piece left in the inventory in every orientation
+        int[][] board = gameboard.getGameBoard();
+        int col = inv[0].getColor();
+
+        // Detect corners of the same color
+        for (int j = 0; j < board[j].length; j++) {
+            for (int i = 0; i < board.length; i++) {
+                if (gameboard.getSpaceValue(i, j) == col) {
+                    // Same logic as in GameBoard.java's isPieceLegal() method
+                    // TODO: Fix this to account for existing pieces already set down (old logic doesn't account for existing)
+                    // Check whether piece is rubbing up against another piece
+                    if (i - 1 >= 0 && gameboard.getSpaceValue(i - 1, j) == col) {
+                        continue;
+                    } else if (i + 1 < board[0].length && gameboard.getSpaceValue(i + 1, j) == col) {
+                        continue;
+                    } else if (j - 1 >= 0 && gameboard.getSpaceValue(i, j - 1) == col) {
+                        continue;
+                    } else if (j + 1 < board.length && gameboard.getSpaceValue(i, j + 1) == col) {
+                        continue;
+                    }
+
+                    // Check diagonals of current coords to see if piece makes corner contact
+                    if (i - 1 >= 0 && j - 1 >= 0 && gameboard.getSpaceValue(i -1, j - 1) == col) {
+                        // Logic here
+                    } else if (i + 1 < board[0].length && j - 1 >= 0 && gameboard.getSpaceValue(i + 1, j -1) == col) {
+                        // Logic here
+                    } else if (i - 1 >= 0 && j + 1 < board.length && gameboard.getSpaceValue(i - 1, j + 1) == col) {
+                        // Logic here
+                    } else if (i + 1 < board[0].length && j + 1 < board.length && gameboard.getSpaceValue(i + 1, j + 1) == col) {
+                        // Logic here
+                    }
+                }
+            }
+        }
+        // TODO: Then try placing every piece left in the inventory in every orientation, offset by piece's w and h?
         // TODO: Return the first move that works
 
         // return new Move(piece, x, y);

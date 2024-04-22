@@ -3,6 +3,12 @@ public class TestApp {
         System.out.println("Testing");
         GameBoard gameboard = new GameBoard();
         GameLogic gamelogic = new GameLogic();
+        Piece[] invBlue, invRed, invGreen, invYellow;
+
+        invBlue = gameboard.createInvPieces(PieceColor.BLUE);
+        invGreen = gameboard.createInvPieces(PieceColor.GREEN);
+        invRed = gameboard.createInvPieces(PieceColor.RED);
+        invYellow = gameboard.createInvPieces(PieceColor.YELLOW);
 
         Piece testPiece = new Piece(Piece.Type.TBLOCK, PieceColor.BLUE);
         testPiece.printLayout();
@@ -15,6 +21,8 @@ public class TestApp {
         gameboard.placePiece(testPiece, x, y);
         gameboard.printBoard();
         System.out.println(legality);
+
+        gamelogic.findMove(invBlue, gameboard);
         
 
         // System.out.println("P1 Score: " + gameboard.calcScoreP1(testPiece,
