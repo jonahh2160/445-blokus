@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 public class EndGameScreen extends JFrame implements ActionListener{
     private MainScreen mainScreen;
+    Sound sound = new Sound(); //AR  
     
     public EndGameScreen(int scoreP1, int scoreP2, GUI blokusGUI) {
         mainScreen = new MainScreen(blokusGUI);

@@ -8,8 +8,14 @@ public class TestApp {
         testPiece.printLayout();
         gameboard.tryPiece(testPiece, 17, 18);
         gameboard.placePiece(testPiece, 17, 18);
+        
+        int x = 15;
+        int y = 16;
+        boolean legality = gameboard.isPieceLegal(testPiece, x, y);
+        gameboard.placePiece(testPiece, x, y);
         gameboard.printBoard();
-        System.out.println(gameboard.isPieceLegal(testPiece, 15, 16));
+        System.out.println(legality);
+        
 
         // System.out.println("P1 Score: " + gameboard.calcScoreP1(testPiece,
         // testPiece));

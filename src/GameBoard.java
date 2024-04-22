@@ -55,7 +55,7 @@ public class GameBoard {
         return board[y][x];
     }
 
-    //EW
+    // EW
     public void setSpaceValue(int x, int y, int value) {
         //Validate coordinates are within the bounds of the board
         if (x >= 0 && x < board[0].length && y >= 0 && y < board.length) {
@@ -87,8 +87,45 @@ public class GameBoard {
             }
         }
 
-        // TODO: Check if the piece establishes corner-contact with its own color
-        // Get the line to each side of the piece
+        // Check if the piece complies with the corner rule
+        boolean validCorner = false;
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                if (piece.getCoordValue(i, j) == col) {
+                    int curX = x + i;
+                    int curY = y + j;
+                    // These if branches are a bit complicated. We have to make sure we're not checking OOB values
+                    // But since we haven't actually placed the piece yet, we don't have to account for its values
+
+                    // Check whether piece is rubbing up against another piece
+                    if (curX - 1 >= 0 && getSpaceValue(curX - 1, curY) == col) {
+                        return false;
+                    } else if (curX + 1 < board[0].length && getSpaceValue(curX + 1, curY) == col) {
+                        return false;
+                    } else if (curY - 1 >= 0 && getSpaceValue(curX, curY - 1) == col) {
+                        return false;
+                    } else if (curY + 1 < board.length && getSpaceValue(curX, curY + 1) == col) {
+                        return false;
+                    }
+
+                    // Check diagonals of current coords to see if piece makes corner contact
+                    if (curX - 1 >= 0 && curY - 1 >= 0 && getSpaceValue(curX -1, curY - 1) == col) {
+                        validCorner = true;
+                    } else if (curX + 1 < board[0].length && curY - 1 >= 0 && getSpaceValue(curX + 1, curY -1) == col) {
+                        validCorner = true;
+                    } else if (curX - 1 >= 0 && curY + 1 < board.length && getSpaceValue(curX - 1, curY + 1) == col) {
+                        validCorner = true;
+                    } else if (curX + 1 < board[0].length && curY + 1 < board.length && getSpaceValue(curX + 1, curY + 1) == col) {
+                        validCorner = true;
+                    }
+                }
+            }
+        }
+
+        // Makes sure the previous branch found at least one valid corner
+        if (!validCorner) {
+            return false;
+        }
 
         return true;
     }
