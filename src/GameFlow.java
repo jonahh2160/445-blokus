@@ -16,8 +16,9 @@ public class GameFlow {
     private Piece lastPieceBlue;
     private Piece lastPieceGreen;
     private Piece lastPieceYellow;
-    Piece[] invBlue, invRed, invGreen, invYellow;
     EndGameScreen endGameScreen;
+    Piece[] invBlue, invRed, invGreen, invYellow;
+    
 
 
     void createSinglePlayerGame(GameBoard gameBoard) {
@@ -90,7 +91,7 @@ public class GameFlow {
     void playerTurn(PieceColor color, Piece[] pieceInventory, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate) {
          
         //Here we'll place Jonah's method to check for available moves first
-        Move availableMove = logic.findMove(invBlue, gameBoard);
+        Move availableMove = logic.findMove(pieceInventory, gameBoard);
         if(availableMove == null){
             setHasNoMoves(color);
             System.out.println("Sorry you have no available moves! Skipping your turn....");
