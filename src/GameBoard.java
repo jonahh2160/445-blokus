@@ -20,7 +20,7 @@ public class GameBoard {
 
     // Returns a list of Pieces for a certain color for start of game
     public Piece[] createInvPieces(PieceColor col) {
-        Piece[] inv = new Piece[20];
+        Piece[] inv = new Piece[21];
 
         inv[0] = new Piece(Piece.Type.ONE, col);
         inv[1] = new Piece(Piece.Type.TWO, col);
@@ -53,6 +53,19 @@ public class GameBoard {
 
     public int getSpaceValue(int x, int y) {
         return board[y][x];
+    }
+
+    //EW
+    public void setSpaceValue(int x, int y, int value) {
+        //Validate coordinates are within the bounds of the board
+        if (x >= 0 && x < board[0].length && y >= 0 && y < board.length) {
+            //Set the value of the space at the specified coordinates
+            board[y][x] = value;
+        } else {
+            //If the coordinates are out of bounds, you can choose to throw an exception
+            //or handle the invalid input in another way, such as logging a warning
+            System.out.println("Invalid coordinates: (" + x + ", " + y + "). Cannot set space value.");
+        }
     }
 
     public boolean isPieceLegal(Piece piece, int x, int y) {
@@ -214,5 +227,4 @@ public class GameBoard {
             System.out.println();
         }
     }
-
 }

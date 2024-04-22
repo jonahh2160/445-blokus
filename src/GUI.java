@@ -12,6 +12,12 @@ public class GUI extends JFrame implements MouseListener {
     private JPanel player2Panel;
     private JLabel player1Score;
     private JLabel player2Score;
+    private Piece selectedPiece;
+    private int selectedColor;
+    private Piece lastBluePiece;
+    private Piece lastRedPiece;
+    private Piece lastYellowPiece;
+    private Piece lastGreenPiece;
 
     public GUI() {
         gameBoard = new GameBoard();
@@ -44,7 +50,7 @@ public class GUI extends JFrame implements MouseListener {
             for (int j = 0; j < 20; j++) {
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(30, 30));
-                button.setBackground(getSpaceColor(gameBoard.getSpaceValue(i, j)));
+                button.setBackground(getPieceColor(gameBoard.getSpaceValue(i, j)));
                 button.addMouseListener(this);
                 boardPanel.add(button);
             }
@@ -96,7 +102,12 @@ public class GUI extends JFrame implements MouseListener {
 
             //Set the background color of the button according to the piece's color
             Color pieceColor = getPieceColor(piece.getColor());
-            //button.setBackground(pieceColor);
+
+            button.addActionListener(e -> {
+                // When a piece is selected, set the selected piece and color
+                selectedPiece = piece;
+                selectedColor = piece.getColor();
+            });
 
             //Add the button to the panel
             panel.add(button);
@@ -108,26 +119,35 @@ public class GUI extends JFrame implements MouseListener {
         //Define the size of the icon (e.g., adjust as needed)
         int iconSize = 30;
 
-        //Create a BufferedImage
+        // Create a BufferedImage
         BufferedImage image = new BufferedImage(iconSize, iconSize, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = image.createGraphics();
 
         //Get the shape of the piece
         int[][] shape = getPieceShape(piece);
-        //Get the color of the piece
+        // Get the color of the piece
         Color pieceColor = getPieceColor(piece.getColor());
 
-        //Calculate cell width and height based on the shape dimensions
+        // Calculate cell width and height based on the shape dimensions
         int cellWidth = iconSize / shape[0].length;
         int cellHeight = iconSize / shape.length;
+
+        //Define the outline color
+        Color outlineColor = Color.BLACK; //You can choose any color you want
 
         //Fill the BufferedImage based on the shape and color of the piece
         for (int row = 0; row < shape.length; row++) {
             for (int col = 0; col < shape[0].length; col++) {
-                if (shape[row][col] == 1 || shape[row][col] == 2 || shape[row][col] == 3 || shape[row][col] == 4) {
+                if (shape[row][col] != 0) {
+                    //Set the fill color to the piece color
                     graphics.setColor(pieceColor);
                     //Draw the colored cell in the BufferedImage
                     graphics.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+
+                    //Set the color for the outline
+                    graphics.setColor(outlineColor);
+                    //Draw an outline around the cell
+                    graphics.drawRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                 }
             }
         }
@@ -178,41 +198,69 @@ public class GUI extends JFrame implements MouseListener {
         player2Panel.add(player2Score, BorderLayout.NORTH);
     }
 
+    private void updateScoreLabels() {
+        //Calculate scores
+        int scoreP1 = gameBoard.calcScoreP1(lastBluePiece, lastRedPiece);
+        int scoreP2 = gameBoard.calcScoreP2(lastYellowPiece, lastGreenPiece);
+
+        //Update the score labels
+        player1Score.setText("Player 1 Score: " + scoreP1);
+        player2Score.setText("Player 2 Score: " + scoreP2);
+    }
+
     //MouseListener methods
     @Override
     public void mouseClicked(MouseEvent e) {
-        //Get the clicked button
+        // Ensure a piece is selected before proceeding
+        if (selectedPiece == null) {
+            return;
+        }
+
+        // Get the clicked button
         JButton clickedButton = (JButton) e.getSource();
 
-        //Calculate the row and column of the clicked button based on its index in the board panel
+        // Calculate the row and column of the clicked button based on its index in the board panel
         int index = boardPanel.getComponentZOrder(clickedButton);
-        int row = index / 20; // Number of columns on the board
-        int col = index % 20; // Number of rows on the board
+        int clickedRow = index / 20; // Number of columns on the board
+        int clickedCol = index % 20; // Number of rows on the board
 
-        //Determine the piece to place and its type and color
-        Piece pieceToPlace = new Piece(Piece.Type.ONE, PieceColor.BLUE);
+        // Get the width and height of the selected piece
+        int pieceWidth = selectedPiece.getWidth();
+        int pieceHeight = selectedPiece.getHeight();
 
-        //Place the piece on the game board at the calculated position (col, row)
-        gameBoard.placePiece(pieceToPlace, col, row);
+        // Iterate through the selected piece's shape
+        for (int y = 0; y < pieceHeight; y++) {
+            for (int x = 0; x < pieceWidth; x++) {
+                // Check if the piece should be placed at this position
+                if (selectedPiece.getCoordValue(x, y) != 0) {
+                    // Calculate the corresponding board coordinates
+                    int boardRow = clickedRow + y;
+                    int boardCol = clickedCol + x;
 
-        //Update the background color of each button in the piece's shape
-        int pieceWidth = pieceToPlace.getWidth();
-        int pieceHeight = pieceToPlace.getHeight();
+                    // Validate the board coordinates to ensure they are within bounds
+                    if (boardRow >= 0 && boardRow < 20 && boardCol >= 0 && boardCol < 20) {
+                        // Calculate the button index in the board panel
+                        int buttonIndex = boardRow * 20 + boardCol;
 
-        //Iterate through the piece's shape
-        for (int i = 0; i < pieceWidth; i++) {
-            for (int j = 0; j < pieceHeight; j++) {
-                //Check if the piece should be placed at this position
-                if (pieceToPlace.getCoordValue(i, j) != 0) {
-                    //Calculate the button index in the board panel
-                    int buttonIndex = (row + j) * 20 + (col + i);
-                    //Get the button at this index
-                    JButton button = (JButton) boardPanel.getComponent(buttonIndex);
-                    //Update the button's background color based on the piece's color
-                    button.setBackground(getSpaceColor(gameBoard.getSpaceValue(row + j, col + i)));
+                        // Get the button at this index
+                        JButton button = (JButton) boardPanel.getComponent(buttonIndex);
+
+                        // Update the button's background color according to the selected piece's color
+                        button.setBackground(getPieceColor(selectedPiece.getColor()));
+
+                        // Update the game board's space value
+                        gameBoard.setSpaceValue(boardRow, boardCol, selectedPiece.getColor());
+                    }
                 }
             }
         }
+
+        // Perform necessary actions after placing the piece (e.g., update scores)
+        updateScoreLabels();
+
+        // Deselect the piece after placing it
+        selectedPiece = null;
+        selectedColor = 0;
     }
 
     @Override
@@ -233,17 +281,5 @@ public class GUI extends JFrame implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
-    }
-
-    //Method to get the color for a space
-    private Color getSpaceColor(int spaceValue) {
-        return switch (spaceValue) {
-            case 0 -> Color.WHITE;
-            case 1 -> Color.BLUE;
-            case 2 -> Color.YELLOW;
-            case 3 -> Color.RED;
-            case 4 -> Color.GREEN;
-            default -> Color.WHITE;
-        };
     }
 }
