@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 //Elijah Wheat 3/24/24
 public class GUI extends JFrame implements MouseListener {
@@ -208,6 +209,33 @@ public class GUI extends JFrame implements MouseListener {
         player2Score.setText("Player 2 Score: " + scoreP2);
     }
 
+    //MT added trying to work through png's
+    private Icon createBlockImage(Piece peice, Color color){
+        int imageSize = 40;
+        String imagePath= "";
+
+        if(color == Color.BLUE){
+            imagePath = "assets/blocks1.png";
+        }else if(color == Color.YELLOW){
+            imagePath = "assets/blocks2.png";
+        }else if(color == Color.RED){
+            imagePath = "assets/blocks3.png";
+        }else{
+            imagePath = "assets/blocks4.png";
+        }
+        
+       
+        File imageFile = new File(imagePath);
+       
+        ImageIcon imageIcon = new ImageIcon(imageFile.getPath());
+
+        Image scaledImage = imageIcon.getImage().getScaledInstance(imageSize, imageSize, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        return scaledIcon;
+
+    }
+
     //MouseListener methods
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -247,6 +275,9 @@ public class GUI extends JFrame implements MouseListener {
 
                         // Update the button's background color according to the selected piece's color
                         button.setBackground(getPieceColor(selectedPiece.getColor()));
+                        
+                        //MT added this to hopefully fill the block with png
+                        button.setIcon(createBlockImage(selectedPiece, getPieceColor(selectedPiece.getColor())));
 
                         // Update the game board's space value
                         gameBoard.setSpaceValue(boardRow, boardCol, selectedPiece.getColor());
