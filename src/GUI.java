@@ -5,10 +5,10 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-//Elijah Wheat 3/24/24
-public class GUI extends JFrame implements MouseListener {
+public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private JPanel boardPanel;
     private GameBoard gameBoard;
+    private GameLogic gameLogic;
     private JPanel player1Panel;
     private JPanel player2Panel;
     private JLabel player1Score;
@@ -19,9 +19,13 @@ public class GUI extends JFrame implements MouseListener {
     private Piece lastRedPiece;
     private Piece lastYellowPiece;
     private Piece lastGreenPiece;
+    private boolean isFirstTurn = true;
+    private JButton[][] boardButtons;
+
 
     public GUI() {
         gameBoard = new GameBoard();
+        gameLogic = new GameLogic();
 
         setTitle("Blokus Game");
         setSize(1000, 800);
@@ -43,19 +47,30 @@ public class GUI extends JFrame implements MouseListener {
 
     //Method to create the game board panel
     private void createBoardPanel() {
-        boardPanel = new JPanel(new GridLayout(20, 20));  //20,20
+        boardPanel = new JPanel(new GridLayout(20, 20));
         boardPanel.setPreferredSize(new Dimension(600, 600));
 
-        //Create buttons for the game board
+        boardButtons = new JButton[20][20];
+
+        // Create buttons for the game board
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
                 JButton button = new JButton();
-                button.setPreferredSize(new Dimension(30,30));   //(30, 30)
-                button.setBackground(getPieceColor(gameBoard.getSpaceValue(i, j)));
+                button.setPreferredSize(new Dimension(30, 30));
+
+                // Set the background color based on the piece color on the game board
+                int spaceValue = gameBoard.getSpaceValue(i, j);
+                button.setBackground(getPieceColor(spaceValue));
+
+                // Add a border to each button to display grid lines
+                button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
                 button.addMouseListener(this);
+                button.addMouseMotionListener(this);
 
-
+                // Add the button to the panel and store it in the array
                 boardPanel.add(button);
+                boardButtons[i][j] = button;
             }
         }
     }
@@ -213,7 +228,7 @@ public class GUI extends JFrame implements MouseListener {
 
     //MT added trying to work through png's
     private Icon createBlockImage(Piece peice, Color color){
-        int imageSize = 30;
+        int imageSize = 40;
         String imagePath= "";
 
         if(color == Color.BLUE){
@@ -225,10 +240,10 @@ public class GUI extends JFrame implements MouseListener {
         }else{
             imagePath = "assets/blocks4.png";
         }
-        
-       
+
+
         File imageFile = new File(imagePath);
-       
+
         ImageIcon imageIcon = new ImageIcon(imageFile.getPath());
 
         Image scaledImage = imageIcon.getImage().getScaledInstance(imageSize, imageSize, Image.SCALE_SMOOTH);
@@ -238,7 +253,60 @@ public class GUI extends JFrame implements MouseListener {
 
     }
 
-    //MouseListener methods
+    @Override
+    // Implement the mouseMoved method from MouseMotionListener
+    public void mouseMoved(MouseEvent e) {
+        // Ensure a piece is selected before proceeding
+        if (selectedPiece == null) {
+            return;
+        }
+
+        // Get the button that the mouse is hovering over
+        JButton hoveredButton = (JButton) e.getSource();
+
+        // Calculate the row and column of the hovered button based on its index in the board panel
+        int index = boardPanel.getComponentZOrder(hoveredButton);
+        int hoveredRow = index / 20;  // Number of columns on the board
+        int hoveredCol = index % 20; // Number of rows on the board
+
+        // Clear the previous highlight (if any)
+        clearHighlight();
+
+        // Get the color of the selected piece
+        Color pieceColor = getPieceColor(selectedPiece.getColor());
+
+        // Iterate through the selected piece's shape
+        for (int y = 0; y < selectedPiece.getHeight(); y++) {
+            for (int x = 0; x < selectedPiece.getWidth(); x++) {
+                // Calculate the board row and column based on the piece's coordinates
+                int boardRow = hoveredRow + y;
+                int boardCol = hoveredCol + x;
+
+                // Check if the placement is within bounds
+                if (boardRow >= 0 && boardRow < 20 && boardCol >= 0 && boardCol < 20) {
+                    // Check if the piece should be placed at this position
+                    if (selectedPiece.getCoordValue(x, y) != 0) {
+                        // Get the button at this position on the board
+                        JButton buttonToHighlight = boardButtons[boardRow][boardCol];
+
+                        // Set the border of the button to the piece color
+                        buttonToHighlight.setBorder(BorderFactory.createLineBorder(pieceColor, 2));
+                    }
+                }
+            }
+        }
+    }
+
+    // Method to clear the previous highlight on the board
+    private void clearHighlight() {
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                JButton button = boardButtons[i][j];
+                button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+            }
+        }
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         // Ensure a piece is selected before proceeding
@@ -253,6 +321,8 @@ public class GUI extends JFrame implements MouseListener {
         int index = boardPanel.getComponentZOrder(clickedButton);
         int clickedRow = index / 20; // Number of columns on the board
         int clickedCol = index % 20; // Number of rows on the board
+
+        clearHighlight();
 
         // Get the width and height of the selected piece
         int pieceWidth = selectedPiece.getWidth();
@@ -277,7 +347,7 @@ public class GUI extends JFrame implements MouseListener {
 
                         // Update the button's background color according to the selected piece's color
                         button.setBackground(getPieceColor(selectedPiece.getColor()));
-                        
+
                         //MT added this to hopefully fill the block with png
                         button.setIcon(createBlockImage(selectedPiece, getPieceColor(selectedPiece.getColor())));
 
@@ -294,6 +364,11 @@ public class GUI extends JFrame implements MouseListener {
         // Deselect the piece after placing it
         selectedPiece = null;
         selectedColor = 0;
+    }
+
+    // Method to switch player turns
+    private void switchPlayerTurns() {
+
     }
 
     @Override
@@ -313,6 +388,11 @@ public class GUI extends JFrame implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+        clearHighlight();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
 
     }
 }
