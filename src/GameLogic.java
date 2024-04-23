@@ -59,6 +59,11 @@ public class GameLogic {
 
     // AR, JH: Returns the first valid move for a certain color it finds
     public Move findMove(Piece[] inv, GameBoard gameboard) {
+        if (inv == null) {
+	        System.err.println("Error: Piece inventory is null.");
+	        return null;
+	    }
+
         int[][] board = gameboard.getGameBoard();
         int col = inv[0].getColor();
 

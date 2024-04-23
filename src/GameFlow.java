@@ -20,7 +20,9 @@ public class GameFlow {
     EndGameScreen endGameScreen;
     Piece[] invBlue, invRed, invGreen, invYellow, currentInventory;
     
-
+    public GameFlow() {
+        this.logic = new GameLogic();
+    }
 
     void createSinglePlayerGame(GameBoard gameBoard) {
 
@@ -30,7 +32,7 @@ public class GameFlow {
         invYellow = gameBoard.createInvPieces(yellow);
 
         if (clicked == null) {
-            System.out.println("Error: clicked is null in createOnePlayerGame.");
+            System.out.println("Error: clicked is null in createTwoPlayerGame.");
             return; // Exit the method early
         }
 
@@ -62,7 +64,7 @@ public class GameFlow {
         invYellow = gameBoard.createInvPieces(yellow);
 
         if (clicked == null) {
-            System.out.println("Error: clicked is null in createTwoPlayerGame.");
+            System.out.println("Error: clicked is null in createOnePlayerGame.");
             return; // Exit the method early
         }
 
