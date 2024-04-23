@@ -2,8 +2,8 @@
 
 public enum PieceColor {
     BLUE(1),
-    YELLOW(2),
-    RED(3),
+    RED(2),
+    YELLOW(3),
     GREEN(4);
 
     private final int col;
