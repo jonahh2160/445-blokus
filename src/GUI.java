@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -10,15 +11,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private JPanel boardPanel;
     private GameBoard gameBoard;
     private GameLogic gameLogic;
+    private GameFlow gameFlow;
     private JPanel player1Panel;
     private JPanel player2Panel;
     private JLabel player1Score;
     private JLabel player2Score;
     private Piece selectedPiece;
-    private Piece lastBluePiece;
-    private Piece lastRedPiece;
-    private Piece lastYellowPiece;
-    private Piece lastGreenPiece;
     private boolean isFirstTurn = true;
     private JButton[][] boardButtons;
 
@@ -83,7 +81,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         player1Panel.add(player1PiecesPanel, BorderLayout.CENTER);
         player1Score = new JLabel("Player 1 Score: 0");
         player1Panel.add(player1Score, BorderLayout.NORTH);
-
+        
         //Add buttons for rotation
         JPanel player1ButtonPanel = new JPanel();
         JButton rotateRightButton1 = new JButton("Rotate Right");
@@ -100,7 +98,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         player2Panel.add(player2PiecesPanel, BorderLayout.CENTER);
         player2Score = new JLabel("Player 2 Score: 0");
         player2Panel.add(player2Score, BorderLayout.NORTH);
-
+        
         //Add buttons for rotation
         JPanel player2ButtonPanel = new JPanel();
         JButton rotateRightButton2 = new JButton("Rotate Right");
@@ -144,14 +142,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             button.addActionListener(e -> {
                 // When a piece is selected, set the selected piece and color
                 gameLogic.pieceSelect(piece);
-                selectedPiece = piece;
-
+                selectedPiece = piece; 
+                
             });
 
             //Add the button to the panel
             panel.add(button);
         }
-    }
+    } 
 
     //Method to create an icon for a piece
     private Icon createPieceIcon(Piece piece) {
@@ -239,28 +237,29 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
     private void updateScoreLabels() {
         //Calculate scores
-        int scoreP1 = gameBoard.calcScoreP1(lastBluePiece, lastRedPiece);
-        int scoreP2 = gameBoard.calcScoreP2(lastYellowPiece, lastGreenPiece);
-
-        //Update the score labels
-        player1Score.setText("Player 1 Score: " + scoreP1);
-        player2Score.setText("Player 2 Score: " + scoreP2);
+        int scoreP1 = gameBoard.calcScoreP1(selectedPiece, selectedPiece);
+        int scoreP2 = gameBoard.calcScoreP2(selectedPiece, selectedPiece);
+        if(selectedPiece.getColor() == 1 || selectedPiece.getColor() == 2) {
+        	player1Score.setText("Player 1 Score: " + scoreP1);
+        }else if(selectedPiece.getColor() == 3 || selectedPiece.getColor() == 4){
+        	player2Score.setText("Player 2 Score: " + scoreP2);
+        }
     }
-
+    
     //Method to rotate the selected piece to the right
     private void rotateSelectedPieceRight() {
         if (selectedPiece != null) {
             selectedPiece.rotateRight();
         }
     }
-
+    
     //Method to rotate the selected piece to the left
     private void rotateSelectedPieceLeft() {
         if (selectedPiece != null) {
             selectedPiece.rotateLeft();
         }
     }
-
+    
     //MT added trying to work through png's
     private Icon createBlockImage(Piece peice, Color color){
         int imageSize = 40;
@@ -289,42 +288,42 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     }
 
     @Override
-    // Implement the mouseMoved method from MouseMotionListener
+    //Implement the mouseMoved method from MouseMotionListener
     public void mouseMoved(MouseEvent e) {
-        // Ensure a piece is selected before proceeding
+        //Ensure a piece is selected before proceeding
         if (selectedPiece == null) {
             return;
         }
 
-        // Get the button that the mouse is hovering over
+        //Get the button that the mouse is hovering over
         JButton hoveredButton = (JButton) e.getSource();
 
-        // Calculate the row and column of the hovered button based on its index in the board panel
+        //Calculate the row and column of the hovered button based on its index in the board panel
         int index = boardPanel.getComponentZOrder(hoveredButton);
         int hoveredRow = index / 20;  // Number of columns on the board
         int hoveredCol = index % 20; // Number of rows on the board
 
-        // Clear the previous highlight (if any)
+        //Clear the previous highlight (if any)
         clearHighlight();
 
-        // Get the color of the selected piece
+        //Get the color of the selected piece
         Color pieceColor = getPieceColor(selectedPiece.getColor());
 
-        // Iterate through the selected piece's shape
+        //Iterate through the selected piece's shape
         for (int y = 0; y < selectedPiece.getHeight(); y++) {
             for (int x = 0; x < selectedPiece.getWidth(); x++) {
-                // Calculate the board row and column based on the piece's coordinates
+                //Calculate the board row and column based on the piece's coordinates
                 int boardRow = hoveredRow + y;
                 int boardCol = hoveredCol + x;
 
-                // Check if the placement is within bounds
+                //Check if the placement is within bounds
                 if (boardRow >= 0 && boardRow < 20 && boardCol >= 0 && boardCol < 20) {
-                    // Check if the piece should be placed at this position
+                    //Check if the piece should be placed at this position
                     if (selectedPiece.getCoordValue(x, y) != 0) {
-                        // Get the button at this position on the board
+                        //Get the button at this position on the board
                         JButton buttonToHighlight = boardButtons[boardRow][boardCol];
 
-                        // Set the border of the button to the piece color
+                        //Set the border of the button to the piece color
                         buttonToHighlight.setBorder(BorderFactory.createLineBorder(pieceColor, 2));
                     }
                 }
@@ -332,7 +331,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         }
     }
 
-    // Method to clear the previous highlight on the board
+    //Method to clear the previous highlight on the board
     private void clearHighlight() {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
@@ -344,78 +343,85 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Ensure a piece is selected before proceeding
+        //Ensure a piece is selected before proceeding
         if (selectedPiece == null) {
             return;
         }
 
-        // Get the clicked button
+        //Get the clicked button
         JButton clickedButton = (JButton) e.getSource();
 
-        // Calculate the row and column of the clicked button based on its index in the board panel
+        //Calculate the row and column of the clicked button based on its index in the board panel
         int index = boardPanel.getComponentZOrder(clickedButton);
-        int clickedRow = index / 20; // Number of columns on the board
-        int clickedCol = index % 20; // Number of rows on the board
+        int clickedRow = index / 20; //Number of columns on the board
+        int clickedCol = index % 20; //Number of rows on the board
 
-        // Clear the previous highlight
+        //Clear the previous highlight
         clearHighlight();
 
-        // Check if it's the first move
+        //Validate the move
+        boolean isValidMove;
+
         if (isFirstTurn) {
-            // Check if the first move is valid using the gameLogic's validFirstMove method
-            boolean isValidFirstMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
+            //Call validFirstMove if it's the first turn
+            isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
+        } else {
+            //Call isValidMove if it's not the first turn
+            isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);
+        }
+        if (!isValidMove) {
+            //If the move is invalid, show an error message and return
+            JOptionPane.showMessageDialog(this, "Invalid move!", "Invalid Move", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-            // If the first move is not valid, provide feedback and return
-            if (!isValidFirstMove) {
-                JOptionPane.showMessageDialog(this, "Invalid first move. The piece must touch the corner of the board.", "Invalid Move", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        // Place the piece on the board using the placePiece method
+        gameBoard.placePiece(selectedPiece, clickedCol, clickedRow);
 
-            // If the move is valid, set isFirstTurn to false
+        // Update the board's visual representation (if necessary)
+        updateBoardVisuals(clickedRow, clickedCol);
+
+        // Update the score labels
+        updateScoreLabels();
+
+        //Set isFirstTurn to false if it was the first turn
+        if (isFirstTurn) {
             isFirstTurn = false;
         }
 
-        // Get the width and height of the selected piece
+        //Deselect the piece after placing it
+        selectedPiece = null;
+    }
+
+    //Add a method to update the board's visual representation
+    private void updateBoardVisuals(int clickedRow, int clickedCol) {
         int pieceWidth = selectedPiece.getWidth();
         int pieceHeight = selectedPiece.getHeight();
 
-        // Iterate through the selected piece's shape
+        //Iterate through the selected piece's shape
         for (int y = 0; y < pieceHeight; y++) {
             for (int x = 0; x < pieceWidth; x++) {
-                // Check if the piece should be placed at this position
                 if (selectedPiece.getCoordValue(x, y) != 0) {
-                    // Calculate the corresponding board coordinates
                     int boardRow = clickedRow + y;
                     int boardCol = clickedCol + x;
 
-                    // Validate the board coordinates to ensure they are within bounds
                     if (boardRow >= 0 && boardRow < 20 && boardCol >= 0 && boardCol < 20) {
-                        // Calculate the button index in the board panel
+                        //Calculate the button index in the board panel
                         int buttonIndex = boardRow * 20 + boardCol;
 
-                        // Get the button at this index
+                        //Get the button at this index
                         JButton button = (JButton) boardPanel.getComponent(buttonIndex);
 
-                        // Update the button's background color according to the selected piece's color
+                        //Update the button's background color according to the selected piece's color
                         button.setBackground(getPieceColor(selectedPiece.getColor()));
 
-                        // MT added this to hopefully fill the block with png
+                        //Set the icon of the button (if using icons)
                         button.setIcon(createBlockImage(selectedPiece, getPieceColor(selectedPiece.getColor())));
-
-                        // Update the game board's space value
-                        gameBoard.setSpaceValue(boardRow, boardCol, selectedPiece.getColor());
                     }
                 }
             }
         }
-
-        // Perform necessary actions after placing the piece (e.g., update scores)
-        updateScoreLabels();
-
-        // Deselect the piece after placing it
-        selectedPiece = null;
     }
-
 
     @Override
     public void mousePressed(MouseEvent e) {

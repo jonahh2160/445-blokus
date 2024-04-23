@@ -23,7 +23,7 @@ public class GameLogic {
         player1Turn = true;
     }
 
-    public boolean isValidMove() {
+    public boolean isValidMove(Piece piece, int x, int y) {
         return true;
     }
 
