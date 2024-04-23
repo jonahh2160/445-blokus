@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -14,7 +15,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private JLabel player1Score;
     private JLabel player2Score;
     private Piece selectedPiece;
-    private int selectedColor;
     private Piece lastBluePiece;
     private Piece lastRedPiece;
     private Piece lastYellowPiece;
@@ -84,12 +84,32 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         player1Score = new JLabel("Player 1 Score: 0");
         player1Panel.add(player1Score, BorderLayout.NORTH);
 
+        //Add buttons for rotation
+        JPanel player1ButtonPanel = new JPanel();
+        JButton rotateRightButton1 = new JButton("Rotate Right");
+        JButton rotateLeftButton1 = new JButton("Rotate Left");
+        rotateRightButton1.addActionListener(e -> rotateSelectedPieceRight());
+        rotateLeftButton1.addActionListener(e -> rotateSelectedPieceLeft());
+        player1ButtonPanel.add(rotateRightButton1);
+        player1ButtonPanel.add(rotateLeftButton1);
+        player1Panel.add(player1ButtonPanel, BorderLayout.SOUTH);
+
         //Create the player 2 panel
         player2Panel = new JPanel(new BorderLayout());
         JScrollPane player2PiecesPanel = createPiecesPanel(PieceColor.YELLOW, PieceColor.GREEN);
         player2Panel.add(player2PiecesPanel, BorderLayout.CENTER);
         player2Score = new JLabel("Player 2 Score: 0");
         player2Panel.add(player2Score, BorderLayout.NORTH);
+
+        //Add buttons for rotation
+        JPanel player2ButtonPanel = new JPanel();
+        JButton rotateRightButton2 = new JButton("Rotate Right");
+        JButton rotateLeftButton2 = new JButton("Rotate Left");
+        rotateRightButton2.addActionListener(e -> rotateSelectedPieceRight());
+        rotateLeftButton2.addActionListener(e -> rotateSelectedPieceLeft());
+        player2ButtonPanel.add(rotateRightButton2);
+        player2ButtonPanel.add(rotateLeftButton2);
+        player2Panel.add(player2ButtonPanel, BorderLayout.SOUTH);
     }
 
     //Method to create a panel with pieces for a player
@@ -123,8 +143,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
             button.addActionListener(e -> {
                 // When a piece is selected, set the selected piece and color
+                gameLogic.pieceSelect(piece);
                 selectedPiece = piece;
-                selectedColor = piece.getColor();
+
             });
 
             //Add the button to the panel
@@ -226,6 +247,20 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         player2Score.setText("Player 2 Score: " + scoreP2);
     }
 
+    //Method to rotate the selected piece to the right
+    private void rotateSelectedPieceRight() {
+        if (selectedPiece != null) {
+            selectedPiece.rotateRight();
+        }
+    }
+
+    //Method to rotate the selected piece to the left
+    private void rotateSelectedPieceLeft() {
+        if (selectedPiece != null) {
+            selectedPiece.rotateLeft();
+        }
+    }
+
     //MT added trying to work through png's
     private Icon createBlockImage(Piece peice, Color color){
         int imageSize = 40;
@@ -322,7 +357,23 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         int clickedRow = index / 20; // Number of columns on the board
         int clickedCol = index % 20; // Number of rows on the board
 
+        // Clear the previous highlight
         clearHighlight();
+
+        // Check if it's the first move
+        if (isFirstTurn) {
+            // Check if the first move is valid using the gameLogic's validFirstMove method
+            boolean isValidFirstMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
+
+            // If the first move is not valid, provide feedback and return
+            if (!isValidFirstMove) {
+                JOptionPane.showMessageDialog(this, "Invalid first move. The piece must touch the corner of the board.", "Invalid Move", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // If the move is valid, set isFirstTurn to false
+            isFirstTurn = false;
+        }
 
         // Get the width and height of the selected piece
         int pieceWidth = selectedPiece.getWidth();
@@ -348,7 +399,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
                         // Update the button's background color according to the selected piece's color
                         button.setBackground(getPieceColor(selectedPiece.getColor()));
 
-                        //MT added this to hopefully fill the block with png
+                        // MT added this to hopefully fill the block with png
                         button.setIcon(createBlockImage(selectedPiece, getPieceColor(selectedPiece.getColor())));
 
                         // Update the game board's space value
@@ -363,13 +414,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
         // Deselect the piece after placing it
         selectedPiece = null;
-        selectedColor = 0;
     }
 
-    // Method to switch player turns
-    private void switchPlayerTurns() {
-
-    }
 
     @Override
     public void mousePressed(MouseEvent e) {
