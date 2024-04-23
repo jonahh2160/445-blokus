@@ -11,13 +11,14 @@ public class GameFlow {
     private PieceColor yellow = PieceColor.YELLOW;
     private PieceColor red = PieceColor.RED;
     private PieceColor green = PieceColor.GREEN;
+    private PieceColor currentPlayer = red;  //Trying to experiment with switching turns 
     private Piece piece;
     private Piece lastPieceRed;
     private Piece lastPieceBlue;
     private Piece lastPieceGreen;
     private Piece lastPieceYellow;
     EndGameScreen endGameScreen;
-    Piece[] invBlue, invRed, invGreen, invYellow;
+    Piece[] invBlue, invRed, invGreen, invYellow, currentInventory;
     
 
 
@@ -87,8 +88,29 @@ public class GameFlow {
         }
     }
 
+    //Experimenting with switching turn logic
+    void switchPlayer(){
+        switch (currentPlayer) {
+            case RED:
+                currentPlayer = PieceColor.BLUE;
+                break;
+            case BLUE:
+                currentPlayer = PieceColor.GREEN;
+                break;
+            case GREEN:
+                currentPlayer = PieceColor.YELLOW;
+                break;
+            case YELLOW:
+                currentPlayer = PieceColor.RED;
+                break;
+        }
+    }
+
     // MT: trying to work through logic of player turn
     void playerTurn(PieceColor color, Piece[] pieceInventory, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate) {
+
+        setCurrentPlayer(color);
+        setCurrentInventory(pieceInventory);
          
         //Here we'll place Jonah's method to check for available moves first
         Move availableMove = logic.findMove(pieceInventory, gameBoard);
@@ -110,7 +132,7 @@ public class GameFlow {
                 setLastPieceAs(color, piece);
                 }
         }
-        
+        switchPlayer();
     }
 
     //MT method to update the last piece placed for each color
@@ -141,7 +163,7 @@ public class GameFlow {
         }
     }
 
-    //Mt Still need to configure for what Jonah's method is returning to make gameOverSignifier equivalent to it
+    //Mt Checks the status of all the variables for no available moves
     void endGameCheck(){
 
        if(redHasNoMoves == true && blueHasNoMoves == true && greenHasNoMoves == true && yellowHasNoMoves == true){
@@ -150,6 +172,7 @@ public class GameFlow {
 
     }
 
+    //Ends the game
     void endGame() {
         gameOver = true;
         chooseWinner(lastPieceRed, lastPieceBlue, lastPieceGreen, lastPieceYellow, blokusGUI);
@@ -163,5 +186,34 @@ public class GameFlow {
         EndGameScreen endGameScreen = new EndGameScreen(scoreP1, scoreP2, blokusGUI);
         endGameScreen.setVisible(true);
 
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void setGUI(GUI gui) {
+        this.blokusGUI = gui;
+    }
+    
+    public void setGameBoard(GameBoard gameBoard) {
+        this.gameBoard = gameBoard;
+    }
+    
+    public void setGameLogic(GameLogic gameLogic) {
+        this.logic = gameLogic;
+    }
+
+    public void setCurrentPlayer(PieceColor color){
+        currentPlayer = color;
+    }
+
+    public void setCurrentInventory(Piece[] inventory){
+        currentInventory = inventory;
+    }
+
+    public PieceColor getCurrentPlayer(){
+        return currentPlayer;
+    }
+    
+    public Piece[] getCurrentInventory(){
+        return currentInventory;
     }
 }
