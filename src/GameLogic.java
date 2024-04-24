@@ -60,9 +60,9 @@ public class GameLogic {
     // AR, JH: Returns the first valid move for a certain color it finds
     public Move findMove(Piece[] inv, GameBoard gameboard) {
         if (inv == null) {
-	        System.err.println("Error: Piece inventory is null.");
-	        return null;
-	    }
+            System.err.println("Error: Piece inventory is null.");
+            return null;
+        }
 
         int[][] board = gameboard.getGameBoard();
         int col = inv[0].getColor();
@@ -71,38 +71,49 @@ public class GameLogic {
         for (int j = 0; j < board[j].length; j++) {
             for (int i = 0; i < board.length; i++) {
                 if (gameboard.getSpaceValue(i, j) == col) {
-                    // Same logic as in GameBoard.java's isPieceLegal() method
-                    // TODO: Fix this to account for existing pieces already set down (old logic doesn't account for existing)
-                    // Check whether piece is rubbing up against another piece
-                    if (i - 1 >= 0 && gameboard.getSpaceValue(i - 1, j) == col) {
-                        continue;
-                    } else if (i + 1 < board[0].length && gameboard.getSpaceValue(i + 1, j) == col) {
-                        continue;
-                    } else if (j - 1 >= 0 && gameboard.getSpaceValue(i, j - 1) == col) {
-                        continue;
-                    } else if (j + 1 < board.length && gameboard.getSpaceValue(i, j + 1) == col) {
-                        continue;
-                    }
+                    // TODO: If a corner is empty, check its cross sections
+                    // If all cross sections succeed, then attempt to place pieces
+                    // If a piece is legal, then return that move and its coordinates
 
-                    // Check diagonals of current coords to see if piece makes corner contact
-                    if (i - 1 >= 0 && j - 1 >= 0 && gameboard.getSpaceValue(i -1, j - 1) == col) {
-                        // Logic here
-                    } else if (i + 1 < board[0].length && j - 1 >= 0 && gameboard.getSpaceValue(i + 1, j -1) == col) {
-                        // Logic here
-                    } else if (i - 1 >= 0 && j + 1 < board.length && gameboard.getSpaceValue(i - 1, j + 1) == col) {
-                        // Logic here
-                    } else if (i + 1 < board[0].length && j + 1 < board.length && gameboard.getSpaceValue(i + 1, j + 1) == col) {
-                        // Logic here
+                    // Check diagonals of the current coordinates: if any of them are occupied,
+                    // continue to the next coordinate
+                    if (i - 1 >= 0 && j - 1 >= 0 && gameboard.getSpaceValue(i - 1, j - 1) == 0) {
+                        // Process corner
+                    }
+                    if (i + 1 < board[0].length && j - 1 >= 0 && gameboard.getSpaceValue(i + 1, j - 1) == 0) {
+                        // Process corner
+                    }
+                    if (i - 1 >= 0 && j + 1 < board.length && gameboard.getSpaceValue(i - 1, j + 1) == 0) {
+                        // Process corner
+                    }
+                    if (i + 1 < board[0].length && j + 1 < board.length && gameboard.getSpaceValue(i + 1, j + 1) == 0) {
+                        // Process corner
                     }
                 }
             }
         }
-        // TODO: Then try placing every piece left in the inventory in every orientation, offset by piece's w and h?
+        // TODO: Then try placing every piece left in the inventory in every
+        // orientation, offset by piece's w and h?
         // TODO: Return the first move that works
 
         // return new Move(piece, x, y);
 
         return null;
+    }
+
+    private boolean crossTest(int x, int y, GameBoard gameboard, int[][] board) {
+        // Check whether corner would rub up against another piece
+        if (x - 1 >= 0 && gameboard.getSpaceValue(x - 1, y) == col) {
+            return false;
+        } else if (x + 1 < board[0].length && gameboard.getSpaceValue(x + 1, y) == col) {
+            return false;
+        } else if (y - 1 >= 0 && gameboard.getSpaceValue(x, y - 1) == col) {
+            return false;
+        } else if (y + 1 < board.length && gameboard.getSpaceValue(x, y + 1) == col) {
+            return false;
+        }
+
+        return true;
     }
 
 }
