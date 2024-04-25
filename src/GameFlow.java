@@ -166,13 +166,13 @@ public class GameFlow {
     }
 
     //Mt Checks the status of all the variables for no available moves
-    /*void endGameCheck(){
+    void endGameCheck(){
 
      if(redHasNoMoves == true && blueHasNoMoves == true && greenHasNoMoves == true && yellowHasNoMoves == true){
         endGame();
        }
 
-    }*/
+    }
 
     //Ends the game
     void endGame() {
