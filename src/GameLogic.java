@@ -67,53 +67,72 @@ public class GameLogic {
         int[][] board = gameboard.getGameBoard();
         int col = inv[0].getColor();
 
-        // Detect corners of the same color
+        // Attempt to find possible moves by checking empty cells
         for (int j = 0; j < board[j].length; j++) {
             for (int i = 0; i < board.length; i++) {
-                if (gameboard.getSpaceValue(i, j) == col) {
-                    // TODO: If a corner is empty, check its cross sections
-                    // If all cross sections succeed, then attempt to place pieces
-                    // If a piece is legal, then return that move and its coordinates
+                if (gameboard.getSpaceValue(i, j) == 0) {
+                    // If there is a corner there, start checking pieces placed there and at various
+                    // orientations. Offset it in some way by piece wh in respect to rotation
 
-                    // Check diagonals of the current coordinates: if any of them are occupied,
-                    // continue to the next coordinate
-                    if (i - 1 >= 0 && j - 1 >= 0 && gameboard.getSpaceValue(i - 1, j - 1) == 0) {
-                        // Process corner
+                    // Check whether spot would rub up against a piece of target color
+                    if (i - 1 >= 0 && gameboard.getSpaceValue(i - 1, j) == col) {
+                        continue;
+                    } else if (i + 1 < board[0].length && gameboard.getSpaceValue(i + 1, j) == col) {
+                        continue;
+                    } else if (j - 1 >= 0 && gameboard.getSpaceValue(i, j - 1) == col) {
+                        continue;
+                    } else if (j + 1 < board.length && gameboard.getSpaceValue(i, j + 1) == col) {
+                        continue;
                     }
-                    if (i + 1 < board[0].length && j - 1 >= 0 && gameboard.getSpaceValue(i + 1, j - 1) == 0) {
-                        // Process corner
-                    }
-                    if (i - 1 >= 0 && j + 1 < board.length && gameboard.getSpaceValue(i - 1, j + 1) == 0) {
-                        // Process corner
-                    }
-                    if (i + 1 < board[0].length && j + 1 < board.length && gameboard.getSpaceValue(i + 1, j + 1) == 0) {
-                        // Process corner
+
+                    // If it doesn't rub up, start testing pieces once any valid corner is found
+                    if ((i - 1 >= 0 && j - 1 >= 0 && gameboard.getSpaceValue(i - 1, j - 1) == col)
+                            || (i + 1 < board[0].length && j - 1 >= 0 && gameboard.getSpaceValue(i + 1, j - 1) == col)
+                            || (i - 1 >= 0 && j + 1 < board.length && gameboard.getSpaceValue(i - 1, j + 1) == col)
+                            || (i + 1 < board[0].length && j + 1 < board.length
+                                    && gameboard.getSpaceValue(i + 1, j + 1) == col)) {
+                        // Try pieces in the inventory. Return the first valid move
+                        for (int k = 0; k < inv.length; k++) {
+                            Piece currentPiece = inv[k];
+                            int x = i;
+                            int y = j;
+
+                            // TODO: Only rotate the piece if it would have an effect
+                            // TODO: Determine the appropriate offset for placement of the piece (relative)
+
+                            // Default rotation
+                            if (gameboard.isPieceLegal(currentPiece, x, y)) {
+                                return new Move(piece, x, y);
+                            }
+
+                            // Rotate once
+                            currentPiece.rotateRight();
+                            if (gameboard.isPieceLegal(currentPiece, x, y)) {
+                                return new Move(piece, x, y);
+                            }
+
+                            // Rotate twice
+                            currentPiece.rotateRight();
+                            if (gameboard.isPieceLegal(currentPiece, x, y)) {
+                                return new Move(piece, x, y);
+                            }
+
+                            // Rotate thrice
+                            currentPiece.rotateRight();
+                            if (gameboard.isPieceLegal(currentPiece, x, y)) {
+                                return new Move(piece, x, y);
+                            }
+                        }
+                    } else {
+                        // No corner of target color was found, check next empty cell
+                        continue;
                     }
                 }
             }
         }
-        // TODO: Then try placing every piece left in the inventory in every
-        // orientation, offset by piece's w and h?
-        // TODO: Return the first move that works
 
-        // return new Move(piece, x, y);
-
+        // If no piece works, then there are no more possible moves
         return null;
-    }
-
-    private boolean crossTest(int x, int y, GameBoard gameboard, int[][] board) {
-        // Check whether corner would rub up against another piece
-        if (x - 1 >= 0 && gameboard.getSpaceValue(x - 1, y) == col) {
-            return false;
-        } else if (x + 1 < board[0].length && gameboard.getSpaceValue(x + 1, y) == col) {
-            return false;
-        } else if (y - 1 >= 0 && gameboard.getSpaceValue(x, y - 1) == col) {
-            return false;
-        } else if (y + 1 < board.length && gameboard.getSpaceValue(x, y + 1) == col) {
-            return false;
-        }
-
-        return true;
     }
 
 }
