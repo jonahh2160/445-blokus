@@ -17,7 +17,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private JLabel player1Score;
     private JLabel player2Score;
     private Piece selectedPiece;
-    private boolean isFirstTurn = true;
     private JButton[][] boardButtons;
 
 
@@ -127,7 +126,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             button.addActionListener(e -> {
                 gameLogic.pieceSelect(piece);
                 selectedPiece = piece; 
-                gameFlow.setCurrentInventory(pieces);
             });
             panel.add(button);
         }
@@ -322,15 +320,35 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         //Clear the previous highlight
         clearHighlight();
 
+        //boolean isFirstMove = true;
+        boolean isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);;
+    
+      /*   //Check the move's validity
+        if (isFirstMove) {
+            //For the first move, use the validFirstMove() method
+            isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
+        } else {
+            //For subsequent moves, use gameLogic.isValidMove()
+            isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);
+        }*/
+        int pieceColorIndex = selectedPiece.getColor()-1;
+        PieceColor pieceColor = null;
+
+
+        if (pieceColorIndex >= 0 && pieceColorIndex < PieceColor.values().length) {
+            pieceColor = PieceColor.values()[pieceColorIndex];
+            System.out.println(pieceColor);
+        } else {
+            System.out.println("Invalid color index");
+        }
         
-            if (gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol)) {
-                gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
-                //gameFlow.getCurrentInventory().remove(selectedPiece);
-                updateScoreLabels();
-                updateBoardVisuals(clickedRow, clickedCol);
-                gameFlow.switchPlayer();
-            }
-            selectedPiece = null;
+        if (isValidMove && pieceColor == gameFlow.getCurrentPlayer()) {
+            gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
+            updateScoreLabels();
+            updateBoardVisuals(clickedRow, clickedCol);
+            gameFlow.switchPlayer();
+        }
+        selectedPiece = null;
     }
 
     //Add a method to update the board's visual representation

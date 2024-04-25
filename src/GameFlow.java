@@ -146,21 +146,23 @@ public class GameFlow{
     }
 
     //Experimenting with switching turn logic
-    void switchPlayer(){
+    void switchPlayer() {
+        // Switch the current player to the next one in the sequence: blue -> yellow -> red -> green -> blue
         switch (currentPlayer) {
             case BLUE:
-                currentPlayer = PieceColor.BLUE;
-                break;
-            case YELLOW:
-                currentPlayer = PieceColor.GREEN;
-                break;
-            case RED:
                 currentPlayer = PieceColor.YELLOW;
                 break;
-            case GREEN:
+            case YELLOW:
                 currentPlayer = PieceColor.RED;
                 break;
+            case RED:
+                currentPlayer = PieceColor.GREEN;
+                break;
+            case GREEN:
+                currentPlayer = PieceColor.BLUE;
+                break;
         }
+        System.out.println(currentPlayer);
     }
 
     // MT: trying to work through logic of player turn
