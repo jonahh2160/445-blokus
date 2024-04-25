@@ -321,8 +321,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
         //Clear the previous highlight
         clearHighlight();
+
         
-        if (gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol)){
             if (gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol)) {
                 gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
                 //gameFlow.getCurrentInventory().remove(selectedPiece);
@@ -331,7 +331,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
                 gameFlow.switchPlayer();
             }
             selectedPiece = null;
-        }
     }
 
     //Add a method to update the board's visual representation
