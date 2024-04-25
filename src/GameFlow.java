@@ -11,7 +11,7 @@ public class GameFlow {
     private PieceColor yellow = PieceColor.YELLOW;
     private PieceColor red = PieceColor.RED;
     private PieceColor green = PieceColor.GREEN;
-    private PieceColor currentPlayer = red;  //Trying to experiment with switching turns 
+    private PieceColor currentPlayer = blue;  //Trying to experiment with switching turns 
     private Piece piece;
     private Piece lastPieceRed;
     private Piece lastPieceBlue;
@@ -93,16 +93,16 @@ public class GameFlow {
     //Experimenting with switching turn logic
     void switchPlayer(){
         switch (currentPlayer) {
-            case RED:
+            case BLUE:
                 currentPlayer = PieceColor.BLUE;
                 break;
-            case BLUE:
+            case YELLOW:
                 currentPlayer = PieceColor.GREEN;
                 break;
-            case GREEN:
+            case RED:
                 currentPlayer = PieceColor.YELLOW;
                 break;
-            case YELLOW:
+            case GREEN:
                 currentPlayer = PieceColor.RED;
                 break;
         }
@@ -166,13 +166,13 @@ public class GameFlow {
     }
 
     //Mt Checks the status of all the variables for no available moves
-    void endGameCheck(){
+    /*void endGameCheck(){
 
-       if(redHasNoMoves == true && blueHasNoMoves == true && greenHasNoMoves == true && yellowHasNoMoves == true){
+     if(redHasNoMoves == true && blueHasNoMoves == true && greenHasNoMoves == true && yellowHasNoMoves == true){
         endGame();
        }
 
-    }
+    }*/
 
     //Ends the game
     void endGame() {

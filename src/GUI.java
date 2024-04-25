@@ -365,41 +365,14 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         //Clear the previous highlight
         clearHighlight();
 
-        //Validate the move
-        boolean isValidMove;
-
-        if (isFirstTurn) {
-            //Call validFirstMove if it's the first turn
-            isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
-        } else {
-            //Call isValidMove if it's not the first turn
-            isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);
+        if (gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol)) {
+            gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
+           // gameFlow.getCurrentInventory().remove(selectedPiece);
+            selectedPiece = null;
+            updateScoreLabels();
+            updateBoardVisuals(clickedRow, clickedCol);
+            gameFlow.switchPlayer();
         }
-        if (!isValidMove) {
-            //If the move is invalid, show an error message and return
-            JOptionPane.showMessageDialog(this, "Invalid move!", "Invalid Move", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        //Place the piece on the board using the placePiece method
-        gameBoard.placePiece(selectedPiece, clickedCol, clickedRow);
-        
-        gameFlow.playerTurn(gameFlow.getCurrentPlayer(), gameFlow.getCurrentInventory(), selectedPiece, gameBoard, clickedRow, clickedCol);
-
-        //Update the board's visual representation
-        updateBoardVisuals(clickedRow, clickedCol);
-
-        //Update the score labels
-        updateScoreLabels();
-
-        //Set isFirstTurn to false if it was the first turn
-        if (isFirstTurn) {
-            isFirstTurn = false;
-        }
-
-        //Deselect the piece after placing it
-        selectedPiece = null;
-        gameFlow.switchPlayer();
     }
 
     //Add a method to update the board's visual representation
