@@ -56,18 +56,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             for (int j = 0; j < 20; j++) {
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(30, 30));
-
-                //Set the background color based on the piece color on the game board
                 int spaceValue = gameBoard.getSpaceValue(i, j);
                 button.setBackground(getPieceColor(spaceValue));
-
-                //Add a border to each button to display grid lines
                 button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-
                 button.addMouseListener(this);
                 button.addMouseMotionListener(this);
-
-                //Add the button to the panel and store it in the array
                 boardPanel.add(button);
                 boardButtons[i][j] = button;
             }
@@ -117,11 +110,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         Piece[] pieces1 = gameBoard.createInvPieces(color1);
         Piece[] pieces2 = gameBoard.createInvPieces(color2);
 
-        //Add pieces to the panel
         addPiecesToPanel(piecesPanel, pieces1);
         addPiecesToPanel(piecesPanel, pieces2);
 
-        //Wrap the panel in a scroll pane for better usability
         JScrollPane scrollPane = new JScrollPane(piecesPanel);
         scrollPane.setPreferredSize(new Dimension(200, 800));
         return scrollPane;
@@ -130,70 +121,45 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     //Method to add pieces to a panel
     private void addPiecesToPanel(JPanel panel, Piece[] pieces) {
         for (Piece piece : pieces) {
-            //Create a new button for each piece
             JButton button = new JButton();
             button.setPreferredSize(new Dimension(60, 60));
-
-            //Set the icon of the button to represent the piece
             button.setIcon(createPieceIcon(piece));
-
-            //Set the background color of the button according to the piece's color
-            Color pieceColor = getPieceColor(piece.getColor());
-
             button.addActionListener(e -> {
-                //When a piece is selected, set the selected piece and color
                 gameLogic.pieceSelect(piece);
                 selectedPiece = piece; 
-                
+                gameFlow.setCurrentInventory(pieces);
             });
-
-            //Add the button to the panel
             panel.add(button);
         }
     } 
 
     //Method to create an icon for a piece
     private Icon createPieceIcon(Piece piece) {
-        //Define the size of the icon
         int iconSize = 30;
 
         //Create a BufferedImage
         BufferedImage image = new BufferedImage(iconSize, iconSize, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = image.createGraphics();
-
-        //Get the shape of the piece
         int[][] shape = getPieceShape(piece);
-        //Get the color of the piece
         Color pieceColor = getPieceColor(piece.getColor());
 
         //Calculate cell width and height based on the shape dimensions
         int cellWidth = iconSize / shape[0].length;
         int cellHeight = iconSize / shape.length;
 
-        //Define the outline color
-        Color outlineColor = Color.BLACK; //You can choose any color you want
+        Color outlineColor = Color.BLACK;
 
-        //Fill the BufferedImage based on the shape and color of the piece
         for (int row = 0; row < shape.length; row++) {
             for (int col = 0; col < shape[0].length; col++) {
                 if (shape[row][col] != 0) {
-                    //Set the fill color to the piece color
                     graphics.setColor(pieceColor);
-                    //Draw the colored cell in the BufferedImage
                     graphics.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-
-                    //Set the color for the outline
                     graphics.setColor(outlineColor);
-                    //Draw an outline around the cell
                     graphics.drawRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
                 }
             }
         }
-
-        //Dispose of graphics context
         graphics.dispose();
-
-        //Convert the BufferedImage to an ImageIcon and return it
         return new ImageIcon(image);
     }
 
@@ -201,18 +167,13 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private int[][] getPieceShape(Piece piece) {
         int width = piece.getWidth();
         int height = piece.getHeight();
-
-        //Create a 2D array to hold the shape of the piece
         int[][] shape = new int[height][width];
 
-        //Fill the 2D array using the piece's coordinates
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                //Use the getCoordValue() method to get the value at each coordinate
                 shape[y][x] = piece.getCoordValue(x, y);
             }
         }
-
         return shape;
     }
 
@@ -291,23 +252,19 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     @Override
     //Implement the mouseMoved method from MouseMotionListener
     public void mouseMoved(MouseEvent e) {
-        //Ensure a piece is selected before proceeding
         if (selectedPiece == null) {
             return;
         }
 
-        //Get the button that the mouse is hovering over
         JButton hoveredButton = (JButton) e.getSource();
 
         //Calculate the row and column of the hovered button based on its index in the board panel
         int index = boardPanel.getComponentZOrder(hoveredButton);
-        int hoveredRow = index / 20;  //Number of columns on the board
-        int hoveredCol = index % 20; //Number of rows on the board
-
-        //Clear the previous highlight
+        int hoveredRow = index / 20;  
+        int hoveredCol = index % 20; 
+        
         clearHighlight();
 
-        //Get the color of the selected piece
         Color pieceColor = getPieceColor(selectedPiece.getColor());
 
         //Iterate through the selected piece's shape
@@ -364,14 +321,16 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
         //Clear the previous highlight
         clearHighlight();
-
-        if (gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol)) {
-            gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
-           // gameFlow.getCurrentInventory().remove(selectedPiece);
+        
+        if (gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol)){
+            if (gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol)) {
+                gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
+                //gameFlow.getCurrentInventory().remove(selectedPiece);
+                updateScoreLabels();
+                updateBoardVisuals(clickedRow, clickedCol);
+                gameFlow.switchPlayer();
+            }
             selectedPiece = null;
-            updateScoreLabels();
-            updateBoardVisuals(clickedRow, clickedCol);
-            gameFlow.switchPlayer();
         }
     }
 
