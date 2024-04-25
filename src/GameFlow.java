@@ -1,6 +1,8 @@
 // MT 
 
-public class GameFlow {
+
+
+public class GameFlow{
     private GUI clicked;
     private GUI blokusGUI;
     private GameBoard gameBoard;
@@ -20,16 +22,69 @@ public class GameFlow {
     EndGameScreen endGameScreen;
     Piece[] invBlue, invRed, invGreen, invYellow, currentInventory;
     
-    public GameFlow() {
+    public GameFlow(GameBoard gameBoard) {
         this.logic = new GameLogic();
-    }
-
-    void createSinglePlayerGame(GameBoard gameBoard) {
-
+        this.gameBoard = gameBoard;
         invBlue = gameBoard.createInvPieces(blue);
         invGreen = gameBoard.createInvPieces(green);
         invRed = gameBoard.createInvPieces(red);
         invYellow = gameBoard.createInvPieces(yellow);
+    }
+
+    Piece[] removePieceFromInventory (Piece piece, PieceColor color ){
+        Piece[] currentInventory;
+
+        //Sets inventory for piece to be removed from
+        if(color == red){
+            currentInventory = invRed;
+        }else if(color == blue){
+            currentInventory = invBlue;
+        }else if(color == green){
+            currentInventory = invGreen;
+        }else{
+            currentInventory = invYellow;
+        }
+
+        int indexToRemove = -1;
+
+        //Finds index of piece to be removed
+        for (int i = 0; i < currentInventory.length; i++) {
+        if (currentInventory[i] == piece) {
+            indexToRemove = i;
+            break;
+        }
+    }
+        //Creates a new array without piece that was played
+         if (indexToRemove != -1) {
+            Piece[] updatedInventory = new Piece[currentInventory.length - 1];
+    
+            System.arraycopy(currentInventory, 0, updatedInventory, 0, indexToRemove);
+            System.arraycopy(currentInventory, indexToRemove + 1, updatedInventory, indexToRemove,
+                    currentInventory.length - indexToRemove - 1);
+
+            // Updates inventory without piece
+            if (color == PieceColor.RED) {
+             invRed = updatedInventory;
+            } else if (color == PieceColor.BLUE) {
+                invBlue = updatedInventory;
+            } else if (color == PieceColor.GREEN) {
+                invGreen = updatedInventory;
+            } else {
+                invYellow = updatedInventory;
+        }
+    }
+    //Returns Array without piece;
+    return currentInventory; 
+}
+
+    
+
+    void createSinglePlayerGame(GameBoard gameBoard) {
+
+        //invBlue = gameBoard.createInvPieces(blue);
+        //invGreen = gameBoard.createInvPieces(green);
+        //invRed = gameBoard.createInvPieces(red);
+        //invYellow = gameBoard.createInvPieces(yellow);
 
         if (clicked == null) {
             System.out.println("Error: clicked is null in createTwoPlayerGame.");

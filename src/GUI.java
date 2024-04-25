@@ -24,7 +24,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     public GUI() {
         gameBoard = new GameBoard();
         gameLogic = new GameLogic();
-        this.gameFlow = new GameFlow();
+        this.gameFlow = new GameFlow(gameBoard);
 
         setTitle("Blokus Game");
         setSize(1000, 800);
