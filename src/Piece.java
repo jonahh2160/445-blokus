@@ -224,4 +224,22 @@ public class Piece {
         return height;
     }
 
+    // Getter for rotation
+    public int getRotation() {
+        return rotation;
+    }
+
+    // Setter for rotation. Also changes the layout
+    public void setRotation(int rotation) {
+        int difference = this.rotation - rotation;
+
+        while (difference != 0) {
+            if (this.rotation > rotation) {
+                rotateRight();
+            } else if (this.rotation < rotation) {
+                rotateLeft();
+            }
+            difference = this.rotation - rotation;
+        }
+    }
 }
