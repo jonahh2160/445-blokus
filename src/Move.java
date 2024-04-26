@@ -13,7 +13,12 @@ public class Move {
         this.y = y;
     }
 
-    // Getter
+    public void printMove() {
+        piece.printLayout();
+        System.out.println("(" + x + ", " + y + ")");
+    }
+
+    // Getters
     public Piece getPiece() {
         return piece;
     }

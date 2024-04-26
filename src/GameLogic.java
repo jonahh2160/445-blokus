@@ -86,41 +86,54 @@ public class GameLogic {
                     }
 
                     // If it doesn't rub up, start testing pieces once any valid corner is found
-                    if ((i - 1 >= 0 && j - 1 >= 0 && gameboard.getSpaceValue(i - 1, j - 1) == col)
-                            || (i + 1 < board[0].length && j - 1 >= 0 && gameboard.getSpaceValue(i + 1, j - 1) == col)
-                            || (i - 1 >= 0 && j + 1 < board.length && gameboard.getSpaceValue(i - 1, j + 1) == col)
-                            || (i + 1 < board[0].length && j + 1 < board.length
-                                    && gameboard.getSpaceValue(i + 1, j + 1) == col)) {
+                    int cornerType = 0;
+                    if (i - 1 >= 0 && j - 1 >= 0 && gameboard.getSpaceValue(i - 1, j - 1) == col) {
+                        // Top Left type
+                        cornerType = 1;
+                    } else if (i + 1 < board[0].length && j - 1 >= 0 && gameboard.getSpaceValue(i + 1, j - 1) == col) {
+                        // Top Right type
+                        cornerType = 2;
+                    } else if (i - 1 >= 0 && j + 1 < board.length && gameboard.getSpaceValue(i - 1, j + 1) == col) {
+                        // Bottom Left type
+                        cornerType = 3;
+                    } else if (i + 1 < board[0].length && j + 1 < board.length
+                            && gameboard.getSpaceValue(i + 1, j + 1) == col) {
+                        // Bottom Right type
+                        cornerType = 4;
+                    }
+
+                    if (cornerType != 0) {
                         // Try pieces in the inventory. Return the first valid move
                         for (int k = 0; k < inv.length; k++) {
                             Piece currentPiece = inv[k];
-                            int x = i;
-                            int y = j;
+                            int x, y;
 
                             // TODO: Only rotate the piece if it would have an effect
                             // TODO: Determine the appropriate offset for placement of the piece (relative)
 
                             // Default rotation
+                            x = calcOffsetX(i, cornerType, currentPiece);
+                            y = calcOffsetY(j, cornerType, currentPiece);
                             if (gameboard.isPieceLegal(currentPiece, x, y)) {
-                                return new Move(piece, x, y);
+                                return new Move(currentPiece, x, y);
                             }
 
                             // Rotate once
                             currentPiece.rotateRight();
                             if (gameboard.isPieceLegal(currentPiece, x, y)) {
-                                return new Move(piece, x, y);
+                                return new Move(currentPiece, x, y);
                             }
 
                             // Rotate twice
                             currentPiece.rotateRight();
                             if (gameboard.isPieceLegal(currentPiece, x, y)) {
-                                return new Move(piece, x, y);
+                                return new Move(currentPiece, x, y);
                             }
 
                             // Rotate thrice
                             currentPiece.rotateRight();
                             if (gameboard.isPieceLegal(currentPiece, x, y)) {
-                                return new Move(piece, x, y);
+                                return new Move(currentPiece, x, y);
                             }
                         }
                     } else {
@@ -133,6 +146,34 @@ public class GameLogic {
 
         // If no piece works, then there are no more possible moves
         return null;
+    }
+
+    // JH: Helper method for findMove()—calculates x offset based on corner location
+    private int calcOffsetX(int x, int cornerType, Piece piece) {
+        int newX = x;
+        int w = piece.getWidth() - 1;
+
+        if (cornerType == 2) {
+            newX = x - w;
+        } else if (cornerType == 4) {
+            newX = x - w;
+        }
+
+        return newX;
+    }
+
+    // JH: Helper method for findMove()—calculates y offset based on corner location
+    private int calcOffsetY(int y, int cornerType, Piece piece) {
+        int newY = 0;
+        int h = piece.getHeight() - 1;
+
+        if (cornerType == 3) {
+            newY = y - h;
+        } else if (cornerType == 4) {
+            newY = y - h;
+        }
+
+        return newY;
     }
 
 }

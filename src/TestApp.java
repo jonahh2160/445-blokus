@@ -11,19 +11,24 @@ public class TestApp {
         invYellow = gameboard.createInvPieces(PieceColor.YELLOW);
 
         Piece testPiece = new Piece(Piece.Type.TBLOCK, PieceColor.BLUE);
+        testPiece.rotateRight();
         testPiece.printLayout();
-        gameboard.tryPiece(testPiece, 17, 18);
-        gameboard.placePiece(testPiece, 17, 18);
-        
-        int x = 15;
-        int y = 16;
-        boolean legality = gameboard.isPieceLegal(testPiece, x, y);
-        gameboard.placePiece(testPiece, x, y);
-        gameboard.printBoard();
-        System.out.println(legality);
+        gameboard.tryPiece(testPiece, 18, 17);
+        gameboard.placePiece(testPiece, 18, 17);
 
-        gamelogic.findMove(invBlue, gameboard);
-        
+        int x = 16;
+        int y = 16;
+        // boolean legality = gameboard.isPieceLegal(testPiece, x, y);
+        testPiece.rotateLeft();
+        gameboard.placePiece(testPiece, x, y);
+        // gameboard.printBoard();
+        // System.out.println(legality);
+
+        System.arraycopy(invBlue, 6, invBlue, 0, invBlue.length - 6);
+
+        Move move = gamelogic.findMove(invBlue, gameboard);
+        gameboard.placePiece(move.getPiece(), move.getX(), move.getY());
+        gameboard.printBoard();
 
         // System.out.println("P1 Score: " + gameboard.calcScoreP1(testPiece,
         // testPiece));
