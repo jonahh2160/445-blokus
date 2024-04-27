@@ -348,7 +348,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             updateBoardVisuals(clickedRow, clickedCol);
             gameFlow.switchPlayer();
         } else{  //MT Added to display dialog box to show correct player's turn
-            JOptionPane.showMessageDialog(null, "It is currently " + gameFlow.getCurrentPlayer() + "'s turn!", "NOT YOUR TURN!!!!",  
+            JOptionPane.showMessageDialog(boardPanel, "It is currently " + gameFlow.getCurrentPlayer() + "'s turn!", "NOT YOUR TURN!!!!",  
                                            JOptionPane.INFORMATION_MESSAGE);
         }
         selectedPiece = null;
