@@ -326,7 +326,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
         
         boolean isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);;
-        boolean isValidMoves = gameLogic.isValidMoves(selectedPiece, clickedRow, clickedCol, gameBoard);
         boolean isValidFirstMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
 
         int pieceColorIndex = selectedPiece.getColor()-1;
@@ -375,7 +374,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         }
 
         Move availableMove = gameLogic.findMove(currentInventory, gameBoard);
-        System.out.print("isValidMoves is " + isValidMoves);
        
         
         if (isValidMove && pieceColor == gameFlow.getCurrentPlayer()) {
@@ -400,7 +398,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             gameFlow.switchInventory();
             //MT checks endgame conditions after every move
             gameFlow.endGameCheck();
-        }else if(!isFirstMove && isValidMoves == false && pieceColor == gameFlow.getCurrentPlayer()){
+        }else if(!isFirstMove && isValidMove == false && pieceColor == gameFlow.getCurrentPlayer()){
             JOptionPane.showMessageDialog(boardPanel, "This piece must be placed on the end of another piece!!!", "YOU CAN'T PLAY THERE!!!",  
             JOptionPane.INFORMATION_MESSAGE);
         }else if(isValidMove && pieceColor != gameFlow.getCurrentPlayer()){  //MT Added to display dialog box to show correct player's turn
