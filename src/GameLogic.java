@@ -25,7 +25,29 @@ public class GameLogic {
 
     public boolean isValidMove(Piece piece, int x, int y) {
         return true;
+
     }
+
+    public boolean isValidMoves(Piece piece, int x, int y, GameBoard gameboard) {
+        int[][] board = gameboard.getGameBoard();
+
+    // Check adjacent cells for filled spaces
+    if (x - 1 >= 0 && board[y][x - 1] != 0) {
+        return true; // Left
+    }
+    if (x + 1 < board[0].length && board[y][x + 1] != 0) {
+        return true; // Right
+    }
+    if (y - 1 >= 0 && board[y - 1][x] != 0) {
+        return true; // Up
+    }
+    if (y + 1 < board.length && board[y + 1][x] != 0) {
+        return true; // Down
+    }
+
+    return false;
+}
+    
 
     public boolean allPiecesPlayed() {
         if (amountOfPieces == 0) {

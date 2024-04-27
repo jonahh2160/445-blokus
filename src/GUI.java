@@ -326,6 +326,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
 
         
         boolean isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);;
+        boolean isValidMoves = gameLogic.isValidMoves(selectedPiece, clickedRow, clickedCol, gameBoard);
         boolean isValidFirstMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
 
         int pieceColorIndex = selectedPiece.getColor()-1;
@@ -374,7 +375,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         }
 
         Move availableMove = gameLogic.findMove(currentInventory, gameBoard);
-
+        System.out.print("isValidMoves is " + isValidMoves);
        
         
         if (isValidMove && pieceColor == gameFlow.getCurrentPlayer()) {
@@ -383,7 +384,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
                 gameFlow.setHasNoMoves(pieceColor);
                 System.out.println("Sorry you have no available moves! Skipping your turn....");
             }
-            isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
+            
+
+
             gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
             //MT added two method below to keep track of when first turn is over to set first turn boolean false
             incrementTurnCounter(gameFlow.getCurrentPlayer());
@@ -397,6 +400,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             gameFlow.switchInventory();
             //MT checks endgame conditions after every move
             gameFlow.endGameCheck();
+        }else if(!isFirstMove && isValidMoves == false && pieceColor == gameFlow.getCurrentPlayer()){
+            JOptionPane.showMessageDialog(boardPanel, "This piece must be placed on the end of another piece!!!", "YOU CAN'T PLAY THERE!!!",  
+            JOptionPane.INFORMATION_MESSAGE);
         }else if(isValidMove && pieceColor != gameFlow.getCurrentPlayer()){  //MT Added to display dialog box to show correct player's turn
             JOptionPane.showMessageDialog(boardPanel, "It is currently " + gameFlow.getCurrentPlayer() + "'s turn!", "NOT YOUR TURN!!!!",  
                                            JOptionPane.INFORMATION_MESSAGE);
