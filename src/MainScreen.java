@@ -17,7 +17,7 @@ public class MainScreen extends JFrame implements ActionListener {
     public MainScreen(GUI blokusGUI) {
         this.blokusGUI = blokusGUI;
         gameBoard = new GameBoard();
-        gameflow = new GameFlow();
+        gameflow = new GameFlow(gameBoard);
 
         // Create frame
         JFrame frame = new JFrame();
