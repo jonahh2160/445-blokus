@@ -68,8 +68,8 @@ public class GameLogic {
         int col = inv[0].getColor();
 
         // Attempt to find possible moves by checking empty cells
-        for (int j = 0; j < board[j].length; j++) {
-            for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board.length; j++) {
+            for (int i = 0; i < board[j].length; i++) {
                 if (gameboard.getSpaceValue(i, j) == 0) {
                     // If there is a corner there, start checking pieces placed there and at various
                     // orientations. Offset it in some way by piece wh in respect to rotation

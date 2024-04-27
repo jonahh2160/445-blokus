@@ -18,6 +18,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private JLabel player2Score;
     private Piece selectedPiece;
     private JButton[][] boardButtons;
+    int blueTurnCounter, redTurnCounter, greenTurnCounter, yellowTurnCounter = 0;
+    boolean isFirstMove = true;
 
 
     public GUI() {
@@ -322,7 +324,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         //Clear the previous highlight
         clearHighlight();
 
-        boolean isFirstMove = true;
+        
         boolean isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);;
         boolean isValidFirstMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
 
@@ -336,6 +338,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             System.out.println("Invalid color index");
         }
     
+        setFirstTurnFalse(isFirstMove, blueTurnCounter, redTurnCounter, greenTurnCounter, yellowTurnCounter);
+
          //Check the move's validity
          //Added a bunch of conitionals to handle all the possible wrong first play options 
         if (isFirstMove && !isValidFirstMove && pieceColor == gameFlow.getCurrentPlayer()) {
@@ -369,15 +373,21 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             currentInventory = gameFlow.invYellow;
         }
 
-        //Move availableMove = gameLogic.findMove(currentInventory, gameBoard);
+        Move availableMove = gameLogic.findMove(currentInventory, gameBoard);
 
-        //if(availableMove == null){
-           // gameFlow.setHasNoMoves(pieceColor);
-           // System.out.println("Sorry you have no available moves! Skipping your turn....");
-        //}
+       
         
         if (isValidMove && pieceColor == gameFlow.getCurrentPlayer()) {
+
+            if(availableMove == null){
+                gameFlow.setHasNoMoves(pieceColor);
+                System.out.println("Sorry you have no available moves! Skipping your turn....");
+            }
+            isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
             gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
+            //MT added two method below to keep track of when first turn is over to set first turn boolean false
+            incrementTurnCounter(gameFlow.getCurrentPlayer());
+            
             updateScoreLabels();
             updateBoardVisuals(clickedRow, clickedCol);
             //MT Added to update last piece played by color 
@@ -387,11 +397,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             gameFlow.switchInventory();
             //MT checks endgame conditions after every move
             gameFlow.endGameCheck();
-        }else if(!isFirstMove && pieceColor != gameFlow.getCurrentPlayer()){  //MT Added to display dialog box to show correct player's turn
+        }else if(isValidMove && pieceColor != gameFlow.getCurrentPlayer()){  //MT Added to display dialog box to show correct player's turn
             JOptionPane.showMessageDialog(boardPanel, "It is currently " + gameFlow.getCurrentPlayer() + "'s turn!", "NOT YOUR TURN!!!!",  
                                            JOptionPane.INFORMATION_MESSAGE);
         }
         selectedPiece = null;
+        incrementTurnCounter(gameFlow.getCurrentPlayer());
     }
 
     //Add a method to update the board's visual representation
@@ -447,5 +458,28 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     @Override
     public void mouseDragged(MouseEvent e) {
 
+    }
+
+    public void incrementTurnCounter(PieceColor color){
+        switch (color) {
+            case BLUE:
+                this.blueTurnCounter += 1;
+                break;
+            case YELLOW:
+                this.yellowTurnCounter += 1;
+                break;
+            case RED:
+                this.redTurnCounter += 1;
+                break;
+            case GREEN:
+                this.greenTurnCounter += 1;
+                break;
+        }
+    }
+
+    public void setFirstTurnFalse(Boolean isFirstMove, int redTurns, int blueTurns, int greenTurns, int yellowTurns){
+        if(redTurns >= 1 && blueTurns >= 1 && greenTurns >= 1 && yellowTurns >=1){
+            this.isFirstMove = false;
+        }
     }
 }
