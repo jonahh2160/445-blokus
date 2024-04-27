@@ -162,8 +162,28 @@ public class GameFlow{
                 currentPlayer = PieceColor.BLUE;
                 break;
         }
-        System.out.println(currentPlayer);
+        System.out.println("Current Player " + currentPlayer);
     }
+
+    void switchInventory() {
+        switch(currentPlayer) {
+                case BLUE:
+                    currentInventory = invYellow;
+                    break;
+                case YELLOW:
+                    currentInventory = invRed;
+                    break;
+                case RED:
+                    currentInventory = invGreen;
+                    break;
+                case GREEN:
+                    currentInventory = invBlue;
+                    break;
+            }
+            System.out.println("Current Inventory " + currentPlayer);
+            
+        }
+    
 
     // MT: trying to work through logic of player turn
     void playerTurn(PieceColor color, Piece[] pieceInventory, Piece piece, GameBoard gameBoard, int xCoordinate, int yCoordinate) {
