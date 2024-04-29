@@ -327,6 +327,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         
         boolean isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);;
         boolean isValidFirstMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
+        boolean isPieceLegal = gameBoard.isPieceLegal(selectedPiece, clickedRow, clickedCol);
 
         int pieceColorIndex = selectedPiece.getColor()-1;
         PieceColor pieceColor = null;
@@ -337,28 +338,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         } else {
             System.out.println("Invalid color index");
         }
-    
-        setFirstTurnFalse(isFirstMove, blueTurnCounter, redTurnCounter, greenTurnCounter, yellowTurnCounter);
-
-         //Check the move's validity
-         //Added a bunch of conitionals to handle all the possible wrong first play options 
-        if (isFirstMove && !isValidFirstMove && pieceColor == gameFlow.getCurrentPlayer()) {
-            //For the first move, use the validFirstMove() method
-            isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
-            JOptionPane.showMessageDialog(boardPanel, "Your first move must be in a corner!", "INVALID FIRST MOVE!!!",  
-                                           JOptionPane.INFORMATION_MESSAGE);
-
-        }else if(isFirstMove && !isValidFirstMove && pieceColor != gameFlow.getCurrentPlayer()){
-            JOptionPane.showMessageDialog(boardPanel, "Your first move must be in a corner! And you must select the right Color!!!", "INVALID FIRST MOVE AND WRONG COLOR!!!",  
-            JOptionPane.INFORMATION_MESSAGE);
-        }else if(isFirstMove && isValidFirstMove && pieceColor != gameFlow.getCurrentPlayer())
-             JOptionPane.showMessageDialog(boardPanel, "You have to select the right color!!!", "WRONG COLOR SELECTION!!!",  
-                                           JOptionPane.INFORMATION_MESSAGE);
-        else {
-            //For subsequent moves, use gameLogic.isValidMove()
-            isValidMove = gameLogic.isValidMove(selectedPiece, clickedRow, clickedCol);
-        }
-       
 
         Piece[] currentInventory;
 
@@ -374,17 +353,24 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         }
 
         Move availableMove = gameLogic.findMove(currentInventory, gameBoard);
-       
-        
-        if (isValidMove && pieceColor == gameFlow.getCurrentPlayer()) {
+    
+        setFirstTurnFalse(isFirstMove, blueTurnCounter, redTurnCounter, greenTurnCounter, yellowTurnCounter);
 
-            if(availableMove == null){
-                gameFlow.setHasNoMoves(pieceColor);
-                System.out.println("Sorry you have no available moves! Skipping your turn....");
-            }
-            
+         //Check the move's validity
+         //MT Added a bunch of conitionals to handle all the possible wrong first play options 
+        if (isFirstMove && !isValidFirstMove && pieceColor == gameFlow.getCurrentPlayer()) {
+            //For the first move, use the validFirstMove() method
+            isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
+            JOptionPane.showMessageDialog(boardPanel, "Your first move must be in a corner!", "INVALID FIRST MOVE!!!",  
+                                           JOptionPane.INFORMATION_MESSAGE);
 
-
+        }else if(isFirstMove && !isValidFirstMove && pieceColor != gameFlow.getCurrentPlayer()){
+            JOptionPane.showMessageDialog(boardPanel, "Your first move must be in a corner! And you must select the right Color!!!", "INVALID FIRST MOVE AND WRONG COLOR!!!",  
+            JOptionPane.INFORMATION_MESSAGE);
+        }else if(isFirstMove && isValidFirstMove && pieceColor != gameFlow.getCurrentPlayer()){
+             JOptionPane.showMessageDialog(boardPanel, "You have to select the right color!!!", "WRONG COLOR SELECTION!!!",  
+                                           JOptionPane.INFORMATION_MESSAGE);
+        }else if(isFirstMove && isValidFirstMove && pieceColor == gameFlow.getCurrentPlayer()){
             gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
             //MT added two method below to keep track of when first turn is over to set first turn boolean false
             incrementTurnCounter(gameFlow.getCurrentPlayer());
@@ -398,13 +384,39 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             gameFlow.switchInventory();
             //MT checks endgame conditions after every move
             gameFlow.endGameCheck();
-        }else if(!isFirstMove && isValidMove == false && pieceColor == gameFlow.getCurrentPlayer()){
+        }else if(!isFirstMove && isPieceLegal && pieceColor == gameFlow.getCurrentPlayer()) {
+
+            if(availableMove == null){
+                gameFlow.setHasNoMoves(pieceColor);
+                System.out.println("Sorry you have no available moves! Skipping your turn....");
+            }
+            
+            gameBoard.placePiece(selectedPiece, clickedRow, clickedCol);
+            //MT added two method below to keep track of when first turn is over to set first turn boolean false
+            incrementTurnCounter(gameFlow.getCurrentPlayer());
+            
+            updateScoreLabels();
+            updateBoardVisuals(clickedRow, clickedCol);
+            //MT Added to update last piece played by color 
+            gameFlow.setLastPieceAs(pieceColor, selectedPiece);
+            gameFlow.switchPlayer();
+            //MT added to switch the current Color Piece Inventory in Game Flow class
+            gameFlow.switchInventory();
+            //MT checks endgame conditions after every move
+            gameFlow.endGameCheck();
+        }else if(!isFirstMove && !isPieceLegal && pieceColor == gameFlow.getCurrentPlayer()){
             JOptionPane.showMessageDialog(boardPanel, "This piece must be placed on the end of another piece!!!", "YOU CAN'T PLAY THERE!!!",  
             JOptionPane.INFORMATION_MESSAGE);
-        }else if(isValidMove && pieceColor != gameFlow.getCurrentPlayer()){  //MT Added to display dialog box to show correct player's turn
+        }else if(!isFirstMove && isPieceLegal && pieceColor != gameFlow.getCurrentPlayer()){  //MT Added to display dialog box to show correct player's turn
             JOptionPane.showMessageDialog(boardPanel, "It is currently " + gameFlow.getCurrentPlayer() + "'s turn!", "NOT YOUR TURN!!!!",  
                                            JOptionPane.INFORMATION_MESSAGE);
         }
+       
+
+        
+       
+        
+        
         selectedPiece = null;
         incrementTurnCounter(gameFlow.getCurrentPlayer());
     }
