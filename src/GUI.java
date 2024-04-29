@@ -410,6 +410,9 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         }else if(!isFirstMove && isPieceLegal && pieceColor != gameFlow.getCurrentPlayer()){  //MT Added to display dialog box to show correct player's turn
             JOptionPane.showMessageDialog(boardPanel, "It is currently " + gameFlow.getCurrentPlayer() + "'s turn!", "NOT YOUR TURN!!!!",  
                                            JOptionPane.INFORMATION_MESSAGE);
+        }else if(!isFirstMove && !isPieceLegal && pieceColor != gameFlow.getCurrentPlayer()){
+            JOptionPane.showMessageDialog(boardPanel, "THIS MOVE IS NOT LEGAL AND YOU MUST SELECT THE RIGHT COLOR!!!", "Wrong Color AND CAN'T PLAY THERE!!!",  
+            JOptionPane.INFORMATION_MESSAGE);
         }
        
 
