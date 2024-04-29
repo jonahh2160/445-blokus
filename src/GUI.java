@@ -119,7 +119,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         return scrollPane;
     }
 
-    //Method to add pieces to a panel
+    //Method to add pieces to a panel EW
     //MT added stuff to remove pieces
     private void addPiecesToPanel(JPanel panel, Piece[] pieces, PieceColor color) {
         for (Piece piece : pieces) {
@@ -143,7 +143,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
                 panel.remove(button);
                 panel.revalidate();
                 panel.repaint();
-            
             });
             panel.add(button);
         }
@@ -156,7 +155,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         //Create a BufferedImage
         BufferedImage image = new BufferedImage(iconSize, iconSize, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = image.createGraphics();
-        int[][] shape = getPieceShape(piece);
+        int[][] shape = piece.getShape();
         Color pieceColor = getPieceColor(piece.getColor());
 
         //Calculate cell width and height based on the shape dimensions
@@ -177,20 +176,6 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         }
         graphics.dispose();
         return new ImageIcon(image);
-    }
-
-    //Method to create the shape of a piece as a 2D array
-    private int[][] getPieceShape(Piece piece) {
-        int width = piece.getWidth();
-        int height = piece.getHeight();
-        int[][] shape = new int[height][width];
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                shape[y][x] = piece.getCoordValue(x, y);
-            }
-        }
-        return shape;
     }
 
     //Method to get the color for a piece
@@ -337,6 +322,25 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         int clickedRow = index / 20; //Number of columns on the board
         int clickedCol = index % 20; //Number of rows on the board
 
+        if (selectedPiece != null) {
+            int pieceWidth = selectedPiece.getWidth();
+            int pieceHeight = selectedPiece.getHeight();
+            
+            // Iterate through the piece's shape
+            for (int i = 0; i < pieceWidth; i++) {
+                for (int j = 0; j < pieceHeight; j++) {
+                    // Calculate the actual position on the board
+                    int actualRow = clickedRow + j;
+                    int actualCol = clickedCol + i;
+                    
+                    // Only print positions that are part of the piece's shape (non-zero)
+                    if (selectedPiece.getCoordValue(i, j) != 0) {
+                        System.out.println("Piece occupies board position: Row " + actualRow + ", Column " + actualCol);
+                    }
+                }
+            }
+        }
+
         //Clear the previous highlight
         clearHighlight();
 
@@ -373,7 +377,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         setFirstTurnFalse(isFirstMove, blueTurnCounter, redTurnCounter, greenTurnCounter, yellowTurnCounter);
 
          //Check the move's validity
-         //MT Added a bunch of conitionals to handle all the possible wrong/correct first play options and correct/wrong every turn after options
+         //MT Added a bunch of conitionals to handle all the possible wrong first play options 
         if (isFirstMove && !isValidFirstMove && pieceColor == gameFlow.getCurrentPlayer()) {
             //For the first move, use the validFirstMove() method
             isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
@@ -430,7 +434,12 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             JOptionPane.showMessageDialog(boardPanel, "THIS MOVE IS NOT LEGAL AND YOU MUST SELECT THE RIGHT COLOR!!!", "Wrong Color AND CAN'T PLAY THERE!!!",  
             JOptionPane.INFORMATION_MESSAGE);
         }
-    
+       
+
+        
+       
+        
+        
         selectedPiece = null;
         incrementTurnCounter(gameFlow.getCurrentPlayer());
     }
@@ -489,6 +498,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     public void mouseDragged(MouseEvent e) {
 
     }
+
     //MT added to so we have a way to track turns
     public void incrementTurnCounter(PieceColor color){
         switch (color) {
@@ -506,11 +516,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
                 break;
         }
     }
+    
     //MT added so we have a way to set first turn false to get other turns logic
     public void setFirstTurnFalse(Boolean isFirstMove, int redTurns, int blueTurns, int greenTurns, int yellowTurns){
         if(redTurns >= 1 && blueTurns >= 1 && greenTurns >= 1 && yellowTurns >=1){
             this.isFirstMove = false;
         }
     }
-
 }

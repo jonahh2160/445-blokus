@@ -231,6 +231,23 @@ public class Piece {
         return rotation;
     }
 
+    public int[][] getShape() {
+        System.out.println("Debugging getShape method:");
+        
+        // Print the layout array
+        for (int row = 0; row < layout.length; row++) {
+            for (int col = 0; col < layout[row].length; col++) {
+                // Print the value of each cell
+                System.out.print(layout[row][col] + " ");
+            }
+            // Print a new line at the end of each row
+            System.out.println();
+        }
+    
+        // Return the layout array
+        return layout;
+    }
+
     // Setter for rotation. Also changes the layout
     public void setRotation(int rotation) {
         int difference = this.rotation - rotation;

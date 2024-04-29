@@ -160,22 +160,30 @@ public class GameBoard {
         }
     }
 
-    // Actually places the piece at the specified location
+    // Actually places the piece at the specified location EW
     public void placePiece(Piece piece, int x, int y) {
-        int w = piece.getWidth();
-        int h = piece.getHeight();
-        int col = piece.getColor();
-
-        // Check if the piece would go out of bounds
-        if (x + w > board[0].length || y + h > board.length) {
-            throw new IllegalArgumentException("Piece placement would go out of bounds!");
+        int pieceWidth = piece.getWidth();  // Width of the piece
+        int pieceHeight = piece.getHeight(); // Height of the piece
+        
+        // Determine the width and height of the game board
+        int boardWidth = board[0].length;  // Width of the board
+        int boardHeight = board.length;    // Height of the board
+    
+        // Check if the piece would go out of bounds horizontally or vertically
+        if (y + pieceWidth > boardWidth || x + pieceHeight > boardHeight) {
+            // Print diagnostic information
+            System.out.println("Piece dimensions: Width=" + pieceWidth + ", Height=" + pieceHeight);
+            System.out.println("Piece placement would go out of bounds horizontally at (" + (x + pieceWidth) + ", " + y + ") or vertically at (" + x + ", " + (y + pieceHeight) + ")");
+    
+            // Throw an exception if the piece placement would go out of bounds
+            throw new IllegalArgumentException("Piece placement would go out of bounds at (" + (x + pieceWidth) + ", " + y + ") or (" + x + ", " + (y + pieceHeight) + ")");
         } else {
-            // Overwrite cells in the game board
-            for (int i = 0; i < w; i++) {
-                for (int j = 0; j < h; j++) {
+            // Overwrite cells in the game board with the piece's color
+            for (int i = 0; i < pieceWidth; i++) {
+                for (int j = 0; j < pieceHeight; j++) {
                     // Only color parts of the piece that AREN'T 0 in its layout
                     if (piece.getCoordValue(i, j) != 0) {
-                        board[y + j][x + i] = col;
+                        board[x + j][y + i] = piece.getColor();
                     }
                 }
             }

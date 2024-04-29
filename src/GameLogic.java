@@ -41,22 +41,49 @@ public class GameLogic {
         return piece;
     }
 
-    // JH: Verifies if a piece is valid for Turn 1 by placing it in a blank board
+    //EW
     public Boolean validFirstMove(Piece piece, int x, int y) {
-        GameBoard testBoard = new GameBoard();
-        testBoard.placePiece(piece, x, y);
-
-        int col = piece.getColor();
-        int topLeft = testBoard.getSpaceValue(0, 0);
-        int topRight = testBoard.getSpaceValue(19, 0);
-        int botLeft = testBoard.getSpaceValue(0, 19);
-        int botRight = testBoard.getSpaceValue(19, 19);
-
-        if (topLeft == col || topRight == col || botLeft == col || botRight == col) {
-            return true;
-        } else {
-            return false;
+        // Define the coordinates for the corners of the board
+        int[][] corners = {
+            {0, 0}, // Top-left corner
+            {0, 19}, // Top-right corner
+            {19, 0}, // Bottom-left corner
+            {19, 19} // Bottom-right corner
+        };
+        
+        // Get the shape of the piece as a 2D array
+        int[][] shape = piece.getShape();
+        int pieceWidth = shape[0].length; // Width of the piece
+        int pieceHeight = shape.length; // Height of the piece
+        
+        System.out.println("Checking piece placement at starting point (x, y): (" + x + ", " + y + ")");
+        
+        // Iterate through the piece's shape
+        for (int i = 0; i < pieceWidth; i++) {
+            for (int j = 0; j < pieceHeight; j++) {
+                // Only check cells that are part of the piece's shape
+                if (shape[j][i] != 0) {
+                    // Calculate the actual row and column on the board
+                    int actualRow = x + j;
+                    int actualCol = y + i;
+                    
+                    System.out.println("Checking piece cell at (" + actualRow + ", " + actualCol + ")");
+                    
+                    // Check if the current cell matches any corner
+                    for (int[] corner : corners) {
+                        if (actualRow == corner[0] && actualCol == corner[1]) {
+                            // If any part of the piece occupies a corner, print diagnostic information and return true
+                            System.out.println("Piece cell at (" + actualRow + ", " + actualCol + ") matches corner at (" + corner[0] + ", " + corner[1] + ")");
+                            return true;
+                        }
+                    }
+                }
+            }
         }
+        
+        // If no part of the piece occupies a corner, print diagnostic information and return false
+        System.out.println("Piece does not occupy any corner");
+        return false;
     }
 
     // AR, JH: Returns the first valid move for a certain color it finds
