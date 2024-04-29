@@ -357,7 +357,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         setFirstTurnFalse(isFirstMove, blueTurnCounter, redTurnCounter, greenTurnCounter, yellowTurnCounter);
 
          //Check the move's validity
-         //MT Added a bunch of conitionals to handle all the possible wrong first play options 
+         //MT Added a bunch of conitionals to handle all the possible wrong/correct first play options and correct/wrong every turn after options
         if (isFirstMove && !isValidFirstMove && pieceColor == gameFlow.getCurrentPlayer()) {
             //For the first move, use the validFirstMove() method
             isValidMove = gameLogic.validFirstMove(selectedPiece, clickedRow, clickedCol);
@@ -414,12 +414,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             JOptionPane.showMessageDialog(boardPanel, "THIS MOVE IS NOT LEGAL AND YOU MUST SELECT THE RIGHT COLOR!!!", "Wrong Color AND CAN'T PLAY THERE!!!",  
             JOptionPane.INFORMATION_MESSAGE);
         }
-       
-
-        
-       
-        
-        
+    
         selectedPiece = null;
         incrementTurnCounter(gameFlow.getCurrentPlayer());
     }
@@ -478,7 +473,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     public void mouseDragged(MouseEvent e) {
 
     }
-
+    //MT added to so we have a way to track turns
     public void incrementTurnCounter(PieceColor color){
         switch (color) {
             case BLUE:
@@ -495,10 +490,11 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
                 break;
         }
     }
-
+    //MT added so we have a way to set first turn false to get other turns logic
     public void setFirstTurnFalse(Boolean isFirstMove, int redTurns, int blueTurns, int greenTurns, int yellowTurns){
         if(redTurns >= 1 && blueTurns >= 1 && greenTurns >= 1 && yellowTurns >=1){
             this.isFirstMove = false;
         }
     }
+
 }
