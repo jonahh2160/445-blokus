@@ -49,7 +49,7 @@ public class GameFlow{
 
         //Finds index of piece to be removed
         for (int i = 0; i < currentInventory.length; i++) {
-        if (currentInventory[i] == piece) {
+        if (currentInventory[i].equals(piece)) {
             indexToRemove = i;
             break;
         }
@@ -75,7 +75,7 @@ public class GameFlow{
     }
     //Returns Array without piece;
     return currentInventory; 
-}
+    }
 
     
 

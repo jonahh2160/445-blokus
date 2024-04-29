@@ -1,5 +1,7 @@
 // JH 4/11
 
+import java.util.Objects;
+
 public class Piece {
 
     // Enum containing the types of pieces
@@ -241,5 +243,25 @@ public class Piece {
             }
             difference = this.rotation - rotation;
         }
+    }
+    //Overriding equals so we have  way to compare pieces
+     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Piece other = (Piece) obj;
+        return type == other.type &&
+                color == other.color &&
+                rotation == other.rotation;
+    }
+
+    //MT gotta do this when you override the equals method according to 430
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, color, rotation);
     }
 }

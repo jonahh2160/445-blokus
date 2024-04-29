@@ -111,8 +111,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
         Piece[] pieces1 = gameBoard.createInvPieces(color1);
         Piece[] pieces2 = gameBoard.createInvPieces(color2);
 
-        addPiecesToPanel(piecesPanel, pieces1);
-        addPiecesToPanel(piecesPanel, pieces2);
+        addPiecesToPanel(piecesPanel, pieces1, color1);
+        addPiecesToPanel(piecesPanel, pieces2, color2);
 
         JScrollPane scrollPane = new JScrollPane(piecesPanel);
         scrollPane.setPreferredSize(new Dimension(200, 800));
@@ -120,7 +120,8 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     }
 
     //Method to add pieces to a panel
-    private void addPiecesToPanel(JPanel panel, Piece[] pieces) {
+    //MT added stuff to remove pieces
+    private void addPiecesToPanel(JPanel panel, Piece[] pieces, PieceColor color) {
         for (Piece piece : pieces) {
             JButton button = new JButton();
             button.setPreferredSize(new Dimension(60, 60));
@@ -128,6 +129,21 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             button.addActionListener(e -> {
                 gameLogic.pieceSelect(piece);
                 selectedPiece = piece; 
+                Piece[] updatedInventory = gameFlow.removePieceFromInventory(piece, color);
+                // Update the available pieces to select
+                if (color == PieceColor.BLUE) {
+                    gameFlow.invBlue = updatedInventory;
+                } else if (color == PieceColor.RED) {
+                    gameFlow.invRed = updatedInventory;
+                } else if (color == PieceColor.GREEN) {
+                    gameFlow.invGreen = updatedInventory;
+                } else {
+                    gameFlow.invYellow = updatedInventory;
+                }
+                panel.remove(button);
+                panel.revalidate();
+                panel.repaint();
+            
             });
             panel.add(button);
         }
