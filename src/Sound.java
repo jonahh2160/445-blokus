@@ -10,11 +10,11 @@ public class Sound
     public sound()
     {
         //winning screen 
-        soundURL[0] = getClass.getResource("assets/zapsplat_multimedia_game_sound_plucked_harp_warm_success_tone_109652.wav");  
+        soundURL[0] = getClass().getResource("assets/zapsplat_multimedia_game_sound_plucked_harp_warm_success_tone_109652.wav");  
         //placing block 
-        soundURL[1] = getClass.getResource("assets/zapsplat_leisure_draughts_game_piece_place_down_onto_board_square_002_17366.wav");  
+        soundURL[1] = getClass().getResource("assets/zapsplat_leisure_draughts_game_piece_place_down_onto_board_square_002_17366.wav");  
         //metal clink 
-        soundURL[2] = getClass.getResource("assets/zapsplat_multimedia_game_sound_put_down_object_metal_clink_delicate_109653.wav"); 
+        soundURL[2] = getClass().getResource("assets/zapsplat_multimedia_game_sound_put_down_object_metal_clink_delicate_109653.wav"); 
     }
 
     public void setFile()
