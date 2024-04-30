@@ -5,8 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class EndGameScreen extends JFrame implements ActionListener{
-    private MainScreen mainScreen;
-    Sound sound = new Sound(); //AR  
+    private MainScreen mainScreen; 
     
     public EndGameScreen(int scoreP1, int scoreP2, GUI blokusGUI) {
         mainScreen = new MainScreen(blokusGUI);
@@ -29,10 +28,13 @@ public class EndGameScreen extends JFrame implements ActionListener{
         JLabel declareTheWinner;
         if(scoreP1 > scoreP2){
             declareTheWinner = new JLabel("THE WINNER IS " + p1 + "!!!!!!!!!!!!!!!!!!!!!!!");
+            
         } else if(scoreP1 < scoreP2){
             declareTheWinner = new JLabel("THE WINNER IS " + p2 + "!!!!!!!!!!!!!!!!!!!!!!!");
+            
         } else{
             declareTheWinner = new JLabel("EVERYONE WINS!!!!!!!!!!!!!!!");
+            
         }
         JLabel player1Score = new JLabel("Player 1: " + scoreP1);
         JLabel player2Score = new JLabel("Player 2: " + scoreP2);

@@ -20,6 +20,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private JButton[][] boardButtons;
     int blueTurnCounter, redTurnCounter, greenTurnCounter, yellowTurnCounter = 0;
     boolean isFirstMove = true;
+    Sound sound = new Sound(); 
 
 
     public GUI() {
@@ -213,6 +214,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private void rotateSelectedPieceRight() {
         if (selectedPiece != null) {
             selectedPiece.rotateRight();
+            playMusic(0);
         }
     }
     
@@ -220,6 +222,7 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
     private void rotateSelectedPieceLeft() {
         if (selectedPiece != null) {
             selectedPiece.rotateLeft();
+            playMusic(0); 
         }
     }
     
@@ -523,4 +526,22 @@ public class GUI extends JFrame implements MouseListener, MouseMotionListener{
             this.isFirstMove = false;
         }
     }
+
+    //AR sound effects 
+    public void playMusic(int i)
+    {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+    public void stopMusic()
+    {
+        sound.stop();
+    }
+    public void playSoundEffects(int i)
+    {
+        sound.setFile(i);
+        sound.play();
+    }
+
 }
